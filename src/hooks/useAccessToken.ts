@@ -1,4 +1,5 @@
 // hooks/useAccessToken.ts
+'use client'
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/MsalProvider";
 import { msalInstance } from "@/lib/msalInstance";

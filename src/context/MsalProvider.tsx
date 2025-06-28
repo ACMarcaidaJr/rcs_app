@@ -42,6 +42,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   //   checkAccount();
   // }, []);
+  useEffect(() => {
+    const checkAccount = async () => {
+      try {
+        await msalInstance.initialize();
+
+        const response = await msalInstance.handleRedirectPromise();
+        const accounts = msalInstance.getAllAccounts();
+
+        if (response?.account) {
+          msalInstance.setActiveAccount(response.account);
+          setAccount(response.account);
+        } else if (accounts.length > 0) {
+          msalInstance.setActiveAccount(accounts[0]);
+          setAccount(accounts[0]);
+        }
+      } catch (error) {
+        console.error("Auth redirect error", error);
+      }
+    };
+
+    checkAccount();
+  }, []);
 
 
   const login = async () => {

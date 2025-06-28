@@ -26,8 +26,29 @@ export const sidelinks: SideLink[] = [
   {
     title: 'Dashboard',
     label: '',
-    href: '/dashboard',
+    href: '/page/dashboard',
     icon: <IconLayoutDashboard size={18} />,
+  },
+
+  {
+    title: 'Records Inventory',
+    label: '',
+    href: '',
+    icon: <IconCheckupList size={18} />,
+    sub: [
+      {
+        title: 'NAP Form 1',
+        label: '3',
+        href: '/page/nap-form-one',
+        icon: <IconClipboardPlus size={18} />,
+      },
+      {
+        title: 'Records',
+        label: '3',
+        href: '/page/records',
+        icon: <IconClipboardPlus size={18} />,
+      },
+    ]
   },
   {
     title: 'Tracking System',
@@ -38,29 +59,23 @@ export const sidelinks: SideLink[] = [
       {
         title: 'New Record',
         label: '3',
-        href: '/tracking',
+        href: '/page/tracking',
         icon: <IconClipboardPlus size={18} />,
       },
-       {
+      {
         title: 'Find',
         label: '3',
-        href: '/find',
+        href: '/page/find',
         icon: <IconSearch size={18} />,
       },
       {
         title: 'Issuances',
         label: '3',
-        href: '/issuances',
+        href: '/page/issuances',
         icon: <IconColumns size={18} />,
       }
     ]
   },
-  // {
-  //   title: 'Automations',
-  //   label: '1',
-  //   href: '/automation',
-  //   icon: <IconAutomaticGearbox size={18} />,
-  // },
   {
     title: 'Mini-Tools',
     label: '',
@@ -70,7 +85,7 @@ export const sidelinks: SideLink[] = [
       {
         title: 'Stamping',
         label: '',
-        href: '/stamping',
+        href: '/page/stamping',
         icon: <IconRubberStamp size={18} />,
       },
 

@@ -1,19 +1,19 @@
 "use client"
 // import { useLocation } from 'react-router-dom'
-import { usePathname } from 'next/navigation'
+"use client";
+import { usePathname } from "next/navigation";
 
 export default function useCheckActiveNav() {
-  const pathname  = usePathname()
+  const pathname = usePathname();
 
   const checkActiveNav = (nav: string) => {
-    const pathArray = pathname.split('/').filter((item) => item !== '')
+    const pathWithoutPage = pathname.replace(/^\/page/, "") || "/";
+    const normalizedNav = nav.startsWith("/page") ? nav.replace(/^\/page/, "") : nav;
 
-    if (nav === '/' && pathArray.length < 1) return true
+    return pathWithoutPage === normalizedNav;
+  };
 
-    return pathArray.includes(nav.replace(/^\//, ''))
-  }
-
-  return { checkActiveNav }
+  return { checkActiveNav };
 }
 
 // 'use client'

@@ -1,27 +1,26 @@
 "use client"
 
 import { Layout } from '@/components/custom/layout'
-// import { Button } from '@/components/custom/button'
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardHeader,
-//   CardTitle,
-// } from '@/components/ui/card'
 import { Search } from '@/components/search'
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import ThemeSwitch from '@/components/theme-switch'
 import { TopNav } from '@/components/top-nav'
 import { UserNav } from '@/components/user-nav'
-// import { RecentSales } from './components/recent-sales'
-// import { Overview } from './components/overview'
-
-// sample, can delete the logout button
 import { useAuth } from "@/context/MsalProvider";
 
 export default function Dashboard() {
   const { logout, account, login } = useAuth();
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch('/api/sample', {
+        method: 'GET',
+      })
+      const result = await res.json()
+      console.log(result)
+    } catch (err) {
+      console.error('Error fetching:', err)
+    }
+  }
   return (
     <Layout>
       {/* ===== Top Heading ===== */}
@@ -33,7 +32,6 @@ export default function Dashboard() {
           <UserNav />
         </div>
       </Layout.Header>
-
       {/* ===== Main ===== */}
       <Layout.Body>
         <div className='mb-2 flex items-center justify-between space-y-2'>
@@ -41,7 +39,7 @@ export default function Dashboard() {
           <div className='flex items-center space-x-2'>
             {account ? <button onClick={logout}>Logout account</button> :
               <button onClick={login}>Login account</button>}
-            {/* <Button>Download</Button> */}
+            <button className="samplefetch" onClick={fetchData}>Fetch data</button>
           </div>
           <div className="user">{account?.name}</div>
         </div>

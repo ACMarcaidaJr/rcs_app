@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { IconChevronsLeft, IconMenu2, IconX } from '@tabler/icons-react'
 import { Layout } from './custom/layout'
 import { Button } from './custom/button'
@@ -8,6 +8,11 @@ import Nav from './nav'
 import { cn } from '@/lib/utils'
 import { sidelinks } from '@/data/sidelinks'
 import { IconFolders } from '@tabler/icons-react';
+
+import { UserNav } from '@/components/user-nav'
+import { Search } from '@/components/search'
+import ThemeSwitch from '@/components/theme-switch'
+
 interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   isCollapsed: boolean
   setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>
@@ -29,6 +34,22 @@ export default function Sidebar({
     }
   }, [navOpened])
 
+  const [modules, setModules] = useState<any>()
+  useEffect(() => {
+    const modulesStr = window.localStorage.getItem('user_modules');
+    console.log("modulesStr################", modulesStr)
+    try {
+      let parsedModules = modulesStr ? JSON.parse(modulesStr) : [];
+      setModules(parsedModules)
+    } catch (err) {
+      console.error('Invalid modules in storage', err);
+      setModules([])
+    }
+
+  }, []);
+
+  console.log('modules', modules)
+  console.log('sidelinks', sidelinks)
   return (
     <aside
       className={cn(
@@ -49,16 +70,12 @@ export default function Sidebar({
           className='z-50 flex justify-between px-4 py-3 shadow-sm md:px-4'
         >
           <div className={`flex items-center ${!isCollapsed ? 'gap-2' : ''}`}>
-            <div className=''>
-              <IconFolders className='text-[100px]' size={24} />
-              <span className='sr-only'>RCS APP</span>
+            <div className='ml-auto w-fit flex items-center space-x-4'>
+              <UserNav />
+              <Search />
+              <ThemeSwitch />
             </div>
-            <div
-              className={`flex flex-col justify-end truncate ${isCollapsed ? 'invisible w-0' : 'visible w-auto'}`}
-            >
-              <span className='font-medium'>RCS Admin</span>
-              {/* <span className='text-xs'>Tools & Monitoring System</span> */}
-            </div>
+
           </div>
 
           {/* Toggle Button in mobile */}
@@ -76,13 +93,15 @@ export default function Sidebar({
         </Layout.Header>
 
         {/* Navigation links */}
-        <Nav
-          id='sidebar-menu'
-          className={`z-40 h-full flex-1 overflow-auto ${navOpened ? 'max-h-screen' : 'max-h-0 py-0 md:max-h-screen md:py-2'}`}
-          closeNav={() => setNavOpened(false)}
-          isCollapsed={isCollapsed}
-          links={sidelinks}
-        />
+        {
+          modules?.length ? <Nav
+            id='sidebar-menu'
+            className={`z-40 h-full flex-1 overflow-auto ${navOpened ? 'max-h-screen' : 'max-h-0 py-0 md:max-h-screen md:py-2'}`}
+            closeNav={() => setNavOpened(false)}
+            isCollapsed={isCollapsed}
+            links={modules}
+          /> : null
+        }
 
         {/* Scrollbar width toggle button */}
         <Button

@@ -1,4 +1,6 @@
-// hooks/useAccessToken.ts
+
+
+// not been using because, this one is already in serverside where uses credintial types: application user/service
 'use client'
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/MsalProvider";

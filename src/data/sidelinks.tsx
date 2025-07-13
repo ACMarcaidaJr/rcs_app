@@ -9,6 +9,8 @@ import {
   IconSearch,
   IconClipboardPlus
 } from '@tabler/icons-react'
+import { Icon } from "@iconify/react";
+
 import { JSX } from 'react'
 
 export interface NavLink {
@@ -17,7 +19,7 @@ export interface NavLink {
   href: string
   icon: JSX.Element
 }
-
+const hi =  {title: "Dashboard",label: "",href: "/page/dashboard",icon: "material-symbols:space-dashboard-outline"}
 export interface SideLink extends NavLink {
   sub?: NavLink[]
 }
@@ -58,7 +60,7 @@ export const sidelinks: SideLink[] = [
     sub: [
       {
         title: 'New Record',
-        label: '3',
+        label: '5',
         href: '/page/tracking',
         icon: <IconClipboardPlus size={18} />,
       },

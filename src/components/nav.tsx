@@ -1,7 +1,9 @@
 'use client'
-import Link from 'next/link' 
+import Link from 'next/link'
 import { IconChevronDown } from '@tabler/icons-react'
 import { Button, buttonVariants } from './custom/button'
+
+import { DynamicTablerIcon } from './dynamic-tabler-icon'
 import {
   Collapsible,
   CollapsibleContent,
@@ -24,6 +26,7 @@ import {
 import { cn } from '@/lib/utils'
 import useCheckActiveNav from '@/hooks/use-check-active-nav'
 import { SideLink } from '@/data/sidelinks'
+import { Icon } from '@radix-ui/react-select'
 
 interface NavProps extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed: boolean
@@ -104,7 +107,9 @@ function NavLink({
       )}
       aria-current={checkActiveNav(href) ? 'page' : undefined}
     >
-      <div className='mr-2'>{icon}</div>
+      <div className='mr-2'>
+        <DynamicTablerIcon iconName={`${icon}`} size={18} />
+      </div>
       {title}
       {label && (
         <div className='ml-2 rounded-lg bg-primary px-1 text-[0.625rem] text-primary-foreground'>
@@ -130,7 +135,9 @@ function NavLinkDropdown({ title, icon, label, sub, closeNav }: NavLinkProps) {
           'group h-12 w-full justify-start rounded-none px-6'
         )}
       >
-        <div className='mr-2'>{icon}</div>
+        <div className='mr-2'>
+          <DynamicTablerIcon iconName={`${icon}`} size={18} />
+        </div>
         {title}
         {label && (
           <div className='ml-2 rounded-lg bg-primary px-1 text-[0.625rem] text-primary-foreground'>
@@ -173,7 +180,7 @@ function NavLinkIcon({ title, icon, label, href }: NavLinkProps) {
             'h-12 w-12'
           )}
         >
-          {icon}
+          <DynamicTablerIcon iconName={`${icon}`} size={18} />
           <span className='sr-only'>{title}</span>
         </Link>
       </TooltipTrigger>

@@ -42,7 +42,7 @@ const Layout = ({ className, fixed = false, ...props }: LayoutProps) => {
     </LayoutContext.Provider>
   )
 }
-Layout.displayName = 'Layout'
+Layout.displayName = 'Layout';
 
 interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   sticky?: boolean
@@ -91,7 +91,7 @@ const Body = React.forwardRef<
       ref={ref}
       data-layout='body'
       className={cn(
-        'px-4 py-6 md:overflow-hidden md:px-8',
+        'px-4  md:overflow-hidden md:px-8',
         contextVal && contextVal.fixed && 'flex-1',
         className
       )}

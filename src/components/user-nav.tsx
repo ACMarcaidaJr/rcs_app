@@ -28,19 +28,21 @@ export function UserNav() {
       <DropdownMenuContent className='w-56' align='end' forceMount>
         <DropdownMenuLabel className='font-normal'>
           <div className='flex flex-col space-y-1'>
-            <p className='text-sm font-medium leading-none'>Username</p>
+            <p className='text-sm font-medium leading-none'>
+              {`${account?.idTokenClaims?.name && account?.idTokenClaims?.name} `}
+            </p>
             <p className='text-xs leading-none text-muted-foreground'>
               {`${account?.idTokenClaims?.preferred_username && account?.idTokenClaims?.preferred_username} `}
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {/* <DropdownMenuGroup>
-          <DropdownMenuItem>
+        <DropdownMenuGroup>
+          <DropdownMenuItem >
             Profile
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          {/* <DropdownMenuItem>
             Billing
             <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
           </DropdownMenuItem>
@@ -48,8 +50,8 @@ export function UserNav() {
             Settings
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem>
-        </DropdownMenuGroup> */}
+          <DropdownMenuItem>New Team</DropdownMenuItem> */}
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className='hover:cursor-pointer' onClick={logout}>
           Log out

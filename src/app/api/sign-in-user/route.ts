@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { fetchFromDataverse } from '@/lib/fetchFromDataverse';
 import { handleApiError } from '@/lib/api-error';
 import { prefixKeysWithCrc9f } from '@/lib/prefixKey';
+import { getUniqueNameFromCookie } from '@/lib/get-user-unique-name-from-cookie';
 
 export async function POST(req: NextRequest) {
     try {
@@ -32,7 +33,6 @@ export async function POST(req: NextRequest) {
         })
         // get all module_ids from module_role table that equal to the role_id
         const role_id = user_role_data?.value[0]?.crc9f_role_id
-        let response = {}
         // IF ROLE THEN FETCH FROM MODULE_ROLES AND ROLES
         if (role_id) {
             const module_role_data = await fetchFromDataverse({

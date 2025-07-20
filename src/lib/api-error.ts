@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export function handleApiError(
     error: unknown,
     req: NextRequest,
+    message_title?: string | '',
     message?: string | '',
     status = 500
 ) {
@@ -13,7 +14,8 @@ export function handleApiError(
         {
             success: false,
             error: error,
-            custom_message: message ,
+            message_title: '',
+            message: message,
         },
         { status }
     );

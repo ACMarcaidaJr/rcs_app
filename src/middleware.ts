@@ -9,20 +9,21 @@ export async function middleware(req: NextRequest) {
     if (path.startsWith("/page/")) {
         const userModulesCookie = req.cookies.get("user_modules")?.value;
         if (!userModulesCookie) {
-            // No access if cookie is missing
             url.pathname = "/";
             return NextResponse.redirect(url);
         }
-
         try {
-            const modules = JSON.parse(decodeURIComponent(userModulesCookie)); // decode if it’s URI-encoded
-            const allowedPaths = modules.map((mod: any) => mod.href);
-            console.log('allowedPaths?.length******', allowedPaths?.length)
-            if (!allowedPaths.includes(path) || allowedPaths?.length && path === "/") {
-                url.pathname = allowedPaths[0];
+            const modules = JSON.parse(decodeURIComponent(userModulesCookie));
+            const allowedPaths: string[] = modules.map((mod: any) => mod.href);
+
+            const isAllowed = allowedPaths.some((allowedPath) =>
+                path.startsWith(allowedPath)
+            );
+
+            if (!isAllowed) {
+                url.pathname = allowedPaths[0] || "/";
                 return NextResponse.redirect(url);
             }
-
         } catch (err) {
             console.error("Invalid user_modules cookie:", err);
             url.pathname = "/";
@@ -33,7 +34,7 @@ export async function middleware(req: NextRequest) {
         const userModulesCookie = req.cookies.get("user_modules")?.value;
         if (userModulesCookie) {
             try {
-                const modules = JSON.parse(decodeURIComponent(userModulesCookie)); // decode if it’s URI-encoded
+                const modules = JSON.parse(decodeURIComponent(userModulesCookie));
                 const allowedPaths = modules.map((mod: any) => mod.href);
                 if (allowedPaths?.length && path === "/") {
                     url.pathname = allowedPaths[0];
@@ -57,7 +58,7 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/", "/page/:path*"],
+    matcher: ["/", "/page/:path*", "/api/:path*"],
 };
 
 

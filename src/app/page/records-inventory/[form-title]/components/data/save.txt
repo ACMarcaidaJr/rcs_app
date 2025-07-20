@@ -1,0 +1,204 @@
+ export interface RecordItem {
+  title_and_description: string;
+  period_covered_or_inclusive_dates: string;
+  volume: string;
+  records_medium: string;
+  restrictions: string;
+  location_of_records: string;
+  frequency_of_use: string;
+  duplication: string;
+  time_value: string;
+  utility_value: string;
+  retention_period_active: string;
+  retention_period_storage: string;
+  retention_period_total: string;
+  disposition_provision: string;
+}
+ {state &&
+                                state.map((group, groupIdx) =>
+                                    group.isEditing ? (
+                                        <React.Fragment key={group.id}>
+                                            {group.items.map((item, itemIdx) => (
+                                                <div
+                                                    key={itemIdx}
+                                                    className='rounded-lg border-solid border-[3px] overflow-clip'
+                                                >
+                                                    <div className='p-3 bg-muted'>
+                                                        <p className='text-foreground'>Subunit: 01</p>
+                                                    </div>
+                                                    <div className="grid gap-4 p-3 [grid-template-columns:repeat(auto-fit,minmax(250px,1fr))]">
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Title and description</Label>
+                                                            <MemoInput
+                                                                value={item.title_and_description}
+                                                                onChange={handleChange('title_and_description', group.id, itemIdx)}
+                                                                placeholder="Enter"
+                                                            />
+                                                        </div>
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label className='truncate'>Period Covered / Inclusive Dates</Label>
+                                                            <MemoInput
+                                                                value={item.period_covered_or_inclusive_dates}
+                                                                onChange={handleChange('period_covered_or_inclusive_dates', group.id, itemIdx)}
+                                                                placeholder="Enter"
+                                                            />
+                                                        </div>
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Volume in cubic meter</Label>
+                                                            <MemoInput
+                                                                placeholder='Number'
+                                                                type='number'
+                                                                value={item.volume}
+                                                                onChange={handleChange('volume', group.id, itemIdx)}
+                                                            />
+                                                        </div>
+
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Records medium</Label>
+                                                            <MemoInput
+                                                                placeholder='Enter'
+                                                                value={item.records_medium}
+                                                                onChange={handleChange('records_medium', group.id, itemIdx)}
+                                                            />
+                                                        </div>
+
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Restrictions</Label>
+                                                            <MemoInput
+                                                                placeholder='Enter'
+                                                                value={item.restrictions}
+                                                                onChange={handleChange('restrictions', group.id, itemIdx)}
+                                                            />
+                                                        </div>
+
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Location of records</Label>
+                                                            <MemoInput
+                                                                placeholder='Enter'
+                                                                value={item.location_of_records}
+                                                                onChange={handleChange('location_of_records', group.id, itemIdx)}
+                                                            />
+                                                        </div>
+
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Frequency of use</Label>
+                                                            <MemoInput
+                                                                placeholder='Frequency of use'
+                                                                value={item.frequency_of_use}
+                                                                onChange={handleChange('frequency_of_use', group.id, itemIdx)}
+                                                            />
+                                                        </div>
+
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Duplication</Label>
+                                                            <MemoInput
+                                                                placeholder='Duplication'
+                                                                value={item.duplication}
+                                                                onChange={handleChange('duplication', group.id, itemIdx)}
+                                                            />
+                                                        </div>
+
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Retention period (Active, Storage, Total)</Label>
+                                                            <div className='flex flex-row gap-2'>
+                                                                <MemoInput
+                                                                    type='number'
+                                                                    placeholder='Year'
+                                                                    value={item.retention_period_active}
+                                                                    onChange={handleChange('retention_period_active', group.id, itemIdx)}
+                                                                />
+                                                                <MemoInput
+                                                                    type='number'
+                                                                    placeholder='Year'
+                                                                    value={item.retention_period_storage}
+                                                                    onChange={handleChange('retention_period_storage', group.id, itemIdx)}
+                                                                />
+                                                                <MemoInput
+                                                                    type='number'
+                                                                    placeholder='Year'
+                                                                    value={item.retention_period_total}
+                                                                    onChange={handleChange('retention_period_total', group.id, itemIdx)}
+                                                                />
+                                                            </div>
+                                                        </div>
+
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Dispostion schedule</Label>
+                                                            <MemoInput
+                                                                type='number'
+                                                                placeholder='Years'
+                                                                value={item.disposition_provision}
+                                                                onChange={handleChange('disposition_provision', group.id, itemIdx)}
+                                                            />
+                                                        </div>
+
+                                                        {/* 
+                                           
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Volume in cubic meter</Label>
+                                                            <Input placeholder='Number' type='number' value={item.volume} />
+                                                        </div>
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Records medium</Label>
+                                                            <Input placeholder='Enter' value={item.records_medium} />
+                                                        </div>
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Restrictions</Label>
+                                                            <Input placeholder='Enter' value={item.restrictions} />
+                                                        </div>
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Location of records</Label>
+                                                            <Input placeholder='Enter' value={item.location_of_records} />
+                                                        </div>
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Frequency of use</Label>
+                                                            <Input placeholder='Frequency of use' value={item.frequency_of_use} />
+                                                        </div>
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Duplication</Label>
+                                                            <Input placeholder='Duplication' value={item.duplication} />
+                                                        </div>
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Time value (T/P)</Label>
+                                                            <Select value={item.time_value}>
+                                                                <SelectTrigger>
+                                                                    <SelectValue placeholder="Choose one..." />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    <SelectItem value="T">Temporary</SelectItem>
+                                                                    <SelectItem value="P">Permanent</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Utility value</Label>
+                                                            <Select value={item.utility_value}>
+                                                                <SelectTrigger>
+                                                                    <SelectValue placeholder="Choose one..." />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    <SelectItem value="Adm">Administrative</SelectItem>
+                                                                    <SelectItem value="F">Fiscal</SelectItem>
+                                                                    <SelectItem value="L">Legal</SelectItem>
+                                                                    <SelectItem value="Arc">Archival</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Retention period (Active, Storage, Total)</Label>
+                                                            <div className='flex flex-row gap-2'>
+                                                                <Input type='number' placeholder='Year' value={item.retention_period_active} />
+                                                                <Input type='number' placeholder='Year' value={item.retention_period_storage} />
+                                                                <Input type='number' placeholder='Year' value={item.retention_period_total} />
+                                                            </div>
+                                                        </div>
+                                                        <div className='flex flex-col gap-2'>
+                                                            <Label>Dispostion schedule</Label>
+                                                            <Input type='number' placeholder='Years' value={item.disposition_provision} />
+                                                        </div> */}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </React.Fragment>
+                                    ) : null
+                                )}

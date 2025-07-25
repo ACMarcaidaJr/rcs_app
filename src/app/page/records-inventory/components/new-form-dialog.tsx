@@ -120,7 +120,8 @@ export default function NewFormDialog() {
       <DialogContent className="max-w-5xl w-full max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Create new a Form</DialogTitle>
-          <DialogDescription className='flex flex-row gap-3 items-center'><span>Add values to this part:</span>
+          <DialogDescription className='flex flex-row gap-3 items-center'>
+            <span>Add values to this part:</span>
             <ImageDialog />
           </DialogDescription>
         </DialogHeader>

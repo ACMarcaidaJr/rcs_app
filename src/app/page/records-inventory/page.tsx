@@ -74,20 +74,24 @@ export default function Page() {
     const [isLoadingforms, setIsLoadingForms] = React.useState<boolean>(false)
     const [formData, setFormData] = React.useState<[]>()
 
-    React.useEffect(() => {
-        (async () => {
-            try {
-                setIsLoadingForms(true)
-                const res = await fetch('/api/nap-form-one-edit')
-                const data = await res.json()
-                setFormData(data?.data)
+    const fetchForms = async () => {
+        try {
+            console.log('fetching forms')
+            setIsLoadingForms(true)
+            const res = await fetch('/api/nap-form-one-edit')
+            const data = await res.json()
+            setFormData(data?.data)
 
-            } catch (error) {
-                console.log('error', error)
-            } finally {
-                setIsLoadingForms(false)
-            }
-        })()
+        } catch (error) {
+            console.log('error', error)
+        } finally {
+            setIsLoadingForms(false)
+        }
+    }
+
+
+    React.useEffect(() => {
+        fetchForms()
     }, [])
     return (
         <Layout fixed className="bg-ghost">
@@ -111,10 +115,11 @@ export default function Page() {
                         </CardContent>
                     </Card>
                     <div className="flex flex-col gap-5 md:rounded-lg md:border md:border-secondary md:p-6" >
-                        <DataTable isloading={isLoadingforms} columns={columns} data={formData ?? []} />
+                        <DataTable fetchForms={fetchForms} isloading={isLoadingforms} columns={columns} data={formData ?? []} />
                     </div>
                 </div>
             </Layout.Body>
         </Layout>
     )
 }
+// 

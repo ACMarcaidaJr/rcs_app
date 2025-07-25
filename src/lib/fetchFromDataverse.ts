@@ -29,6 +29,7 @@ export async function fetchFromDataverse({
             'Content-Type': 'application/json',
             'OData-Version': '4.0',
             'OData-MaxVersion': '4.0',
+            'Prefer': 'return=representation'
         },
         ...(body ? { body: JSON.stringify(body) } : {}),
     });

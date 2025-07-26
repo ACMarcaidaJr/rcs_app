@@ -26,6 +26,8 @@ import { use } from 'react'
 import { toast } from '@/components/ui/use-toast';
 import { pickOnlyRecordItemFields } from '@/lib/pickOnlyFieldsInRecordItem';
 import { Skeleton } from '@/components/ui/skeleton';
+import PreviewNapFormOneDialog from '../components/preview-nap-form-one';
+import { Label } from '@/components/ui/label';
 type State = GroupItem[];
 
 type Action =
@@ -81,6 +83,8 @@ export default function Page({ params }: {
                                 ...group.items,
                                 group.group_values[0]
                             ],
+                            group_title: group.items.length > 1 ? group.group_title : '',
+                            is_single_unit: group.items.length > 2 ? false : true,
                         }
                         : group
                 );
@@ -112,7 +116,7 @@ export default function Page({ params }: {
                         : group
                 );
             }
-  
+
             case 'update_group_value_field': {
                 const { groupId, itemIndex, field, value } = action;
 
@@ -161,20 +165,6 @@ export default function Page({ params }: {
                 });
             }
 
-
-            // case 'update_group_value_field':{
-            //         return state.map(group =>
-            //             group.id === action.groupId
-            //                 ? {
-            //                     ...group,
-            //                     group_values: group.group_values.map((gv, i) =>
-            //                         i === action.itemIndex ? { ...gv, [action.field]: action.value } : gv
-            //                     ),
-            //                 }
-            //                 : group
-            //         );
-            //     }
-
             case 'update_group_title': {
                 return state.map(group =>
                     group.id === action.groupId
@@ -199,6 +189,7 @@ export default function Page({ params }: {
                 return newState.map(group => ({
                     ...group,
                     is_editing: group.id === nextId ? willEdit : false,
+
                 }));
             }
             case 'toggle_is_single_unit': {
@@ -217,6 +208,8 @@ export default function Page({ params }: {
                         return {
                             ...group,
                             items: group.items.filter((_, idx) => idx !== action.itemIndex),
+                            group_title: group.items.length > 2 ? group.group_title : '',
+                            is_single_unit: group.items.length > 2 ? false : true
                         };
                     }
                     return group;
@@ -429,6 +422,13 @@ export default function Page({ params }: {
                     >
                         <IconDeviceFloppy size={15} /> <span>Save</span>
                     </Button>
+                    <Button variant='outline' disabled={!formData}>
+                        Discard changes
+                    </Button>
+                    <Button variant='outline'>
+                        Download as a PDF
+                    </Button>
+                    <PreviewNapFormOneDialog />
                 </div>
             </Layout.Header>
             <Layout.Body className=" flex flex-1 flex-row">
@@ -463,25 +463,29 @@ export default function Page({ params }: {
                                                     }
 
                                                 </Button>
-                                                <Input
-                                                    disabled={is_single_unit || !is_editing}
-                                                    onChange={(e) =>
-                                                        dispatch({
-                                                            type: 'update_group_title',
-                                                            groupId: id,
-                                                            value: e.target.value,
-                                                        })
-                                                    }
-                                                    value={group_title}
-                                                    className=''
-                                                    placeholder='Records Series Title & Description' />
+                                                <div className="flex flex-col gap-2 w-full">
+                                                    <Label>Group title</Label>
+                                                    <Input
+                                                        disabled={!is_editing || items.length <= 1}
+                                                        onChange={(e) =>
+                                                            dispatch({
+                                                                type: 'update_group_title',
+                                                                groupId: id,
+                                                                value: e.target.value,
+                                                            })
+                                                        }
+                                                        value={group_title}
+                                                        className=''
+                                                        placeholder='Leave empty if single unit' />
+                                                </div>
+
                                                 <Button className='px-0' variant='ghost'
                                                     onClick={() => dispatch({ type: 'remove_group', groupId: id })}>
                                                     <IconX />
                                                 </Button>
                                             </div>
                                             <div className='flex flex-row justify-around gap-2 '>
-                                                <div className='flex items-center flex-row gap-2 text-[13px]'>
+                                                {/* <div className='flex items-center flex-row gap-2 text-[13px]'>
                                                     <Checkbox
                                                         disabled={items?.length != 1 || !is_editing}
                                                         checked={is_single_unit}
@@ -489,9 +493,10 @@ export default function Page({ params }: {
                                                             dispatch({ type: 'toggle_is_single_unit', groupId: id, value: val })
                                                         } />
                                                     {items?.length != 1 || !is_editing ? <span className='text-nowrap font-medium text-gray-400 dark:text-gray-500'>Single Unit</span> : <span className='text-nowrap font-medium'>Single Unit</span>}
-                                                </div>
+                                                </div> */}
                                                 <EditGroupValue
                                                     key={idx}
+                                                    items={items}
                                                     group_value={group_values[0]}
                                                     groupId={id}
                                                     handleChange={groupValueGetInputHandler}

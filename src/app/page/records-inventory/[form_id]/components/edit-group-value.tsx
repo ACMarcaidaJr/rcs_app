@@ -29,16 +29,17 @@ interface RecordItemFormProps {
   ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputHandlers: Map<string, Record<string, (value: string) => void>>;
   isEditing?: boolean;
+  items: RecordItem[];
 }
 
 
-export const EditGroupValue = React.memo(({ isEditing, group_value, groupId, handleChange, inputHandlers }: RecordItemFormProps) => {
+export const EditGroupValue = React.memo(({ isEditing, group_value, groupId, handleChange, inputHandlers,items }: RecordItemFormProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button disabled={!isEditing} className="rounded-md w-fit flex flex-row gap-2" variant="ghost">
-          Group values
+        <Button disabled={!isEditing || items.length <= 1} className="rounded-md w-fit flex flex-row gap-2" variant="ghost">
           <IconRelationOneToMany size={18} />
+          Group values
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-5xl w-full max-h-[90vh] overflow-y-auto">

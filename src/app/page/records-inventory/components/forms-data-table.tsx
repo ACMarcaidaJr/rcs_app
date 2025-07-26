@@ -139,11 +139,9 @@ export function DataTable<TData, TValue>({
                                     <TableRow>
                                         {
                                             table.getAllColumns()?.map(() => (
-
                                                 <TableCell>
-                                                    <Skeleton className='h-[40px] min-w-[400px]rounded-lg' />
+                                                    <Skeleton className='h-[40px]  rounded-lg' />
                                                 </TableCell>
-
                                             ))
                                         }
                                     </TableRow></>

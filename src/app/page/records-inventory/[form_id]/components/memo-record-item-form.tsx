@@ -51,7 +51,7 @@ export const RecordItemForm = React.memo(({ item, itemIdx, groupId, handleChange
                 <div className="flex flex-col gap-2">
                     <Label>Volume in cubic meter</Label>
                     <MemoInput
-                        type="number"
+                        type="text"
                         value={item.volume}
                         onChange={handleChange('volume', groupId, itemIdx)}
                         placeholder="Number"

@@ -6,7 +6,6 @@ import { Layout } from './custom/layout'
 import { Button } from './custom/button'
 import Nav from './nav'
 import { cn } from '@/lib/utils'
-import { sidelinks } from '@/data/sidelinks'
 import { IconFolders } from '@tabler/icons-react';
 
 import { UserNav } from '@/components/user-nav'
@@ -49,7 +48,7 @@ export default function Sidebar({
   }, []);
 
   console.log('modules', modules)
-  console.log('sidelinks', sidelinks)
+
   return (
     <aside
       className={cn(

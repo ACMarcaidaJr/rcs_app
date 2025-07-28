@@ -77,7 +77,7 @@ export const createInitialGroup = (id: number, isEditing?: boolean): GroupItem =
   id: id,
   group_title: '',
   is_editing: isEditing ?? false,
-  is_single_unit: false,
+  is_single_unit: true,
   group_values: [
     initialItem
   ],

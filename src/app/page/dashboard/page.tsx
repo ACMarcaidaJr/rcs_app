@@ -36,12 +36,7 @@ export default function Dashboard() {
       <Layout.Body>
         <div className='mb-2 flex items-center justify-between space-y-2'>
           <h1 className='text-2xl font-bold tracking-tight'>Dashboard</h1>
-          <div className='flex items-center space-x-2'>
-            {account ? <button onClick={logout}>Logout account</button> :
-              <button onClick={login}>Login account</button>}
-            <button className="samplefetch" onClick={fetchData}>Fetch data</button>
-          </div>
-          <div className="user">{account?.name}</div>
+          
         </div>
       </Layout.Body>
     </Layout>

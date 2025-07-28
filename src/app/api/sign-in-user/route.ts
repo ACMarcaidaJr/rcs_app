@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
 
             const module_data = await fetchFromDataverse({
                 table: `${process.env.MODULE_TABLE}`,
-                query: `$filter=${moduleFilter}&$select=crc9f_module_id,crc9f_is_active,crc9f_href, crc9f_label, crc9f_title, crc9f_icon`
+                query: `$filter=${moduleFilter}&$select=crc9f_module_id,crc9f_is_active,crc9f_href, crc9f_label, crc9f_title, crc9f_icon, crc9f_is_sidelink`
             });
 
             const cleaned_modules = module_data?.value?.map((item: any) => ({
@@ -63,6 +63,7 @@ export async function POST(req: NextRequest) {
                 href: item.crc9f_href,
                 label: item.crc9f_label,
                 title: item.crc9f_title,
+                is_sidelink: item.crc9f_is_sidelink,
             })) || [];
 
             const response = NextResponse.json({

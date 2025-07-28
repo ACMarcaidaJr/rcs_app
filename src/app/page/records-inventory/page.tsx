@@ -65,6 +65,7 @@ const form_data = [
 import { columns, Forms } from "./components/forms-list-column"
 import { DataTable } from "./components/forms-data-table"
 import { useFetch } from "@/hooks/use-fetch";
+import SubmitFormDialog from "./components/submit-form-dialog";
 
 
 export default function Page() {
@@ -110,7 +111,9 @@ export default function Page() {
                             <div className="">
                                 <p><strong>Due Date:</strong> August 10, 2025</p>
                                 <p><strong>Status:</strong> Ongoing</p>
-                                <div className="flex flex-row gap-1"><strong>Submitted:</strong> <p className="italic ">You've no response yet</p></div>
+                                <div className="flex flex-row items-center gap-1 h-fit"><strong>Submitted:</strong>
+                                    <SubmitFormDialog />
+                                </div>
                             </div>
                         </CardContent>
                     </Card>

@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useAuth } from '@/context/MsalProvider'
+import Link from 'next/link'
 export function UserNav() {
   const { account, login, loading, logout } = useAuth();
 
@@ -21,7 +22,7 @@ export function UserNav() {
         <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
           <Avatar className='h-8 w-8'>
             <AvatarImage src='/avatars/01.png' alt='@shadcn' />
-            <AvatarFallback>{`${account?.idTokenClaims?.name && account?.idTokenClaims?.name[0]} `}</AvatarFallback>
+            {!loading && <AvatarFallback>{`${account?.idTokenClaims?.name && account?.idTokenClaims?.name[0]} `}</AvatarFallback>}
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -38,19 +39,9 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem >
-            Profile
-            {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
+          <DropdownMenuItem  >
+            <Link href='/page/profile'><p>Profile</p></Link>
           </DropdownMenuItem>
-          {/* <DropdownMenuItem>
-            Billing
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className='hover:cursor-pointer' onClick={logout}>

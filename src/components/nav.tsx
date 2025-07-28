@@ -89,10 +89,12 @@ function NavLink({
   icon,
   label,
   href,
+  is_sidelink,
   closeNav,
   subLink = false,
 }: NavLinkProps) {
   const { checkActiveNav } = useCheckActiveNav()
+  if (!is_sidelink) return
   return (
     <Link
       href={href}
@@ -165,8 +167,9 @@ function NavLinkDropdown({ title, icon, label, sub, closeNav }: NavLinkProps) {
   )
 }
 
-function NavLinkIcon({ title, icon, label, href }: NavLinkProps) {
+function NavLinkIcon({ title, icon, label, href, is_sidelink }: NavLinkProps) {
   const { checkActiveNav } = useCheckActiveNav()
+  if (!is_sidelink) return
   return (
     <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>

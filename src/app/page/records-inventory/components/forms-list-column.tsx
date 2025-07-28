@@ -16,7 +16,7 @@ import Link from "next/link"
 export type Forms = {
     nap_form_one_header_id: number
     form_name: string
-    modifiedon: string 
+    modifiedon: string
     status: "draft" | "submitted" | "for revision" | "cancelled" | string
 }
 
@@ -71,7 +71,7 @@ export const columns: ColumnDef<Forms>[] = [
         header: "Status",
     },
     {
-        accessorKey: "actions",
+        accessorKey: "Action",
         header: "Actions",
         id: "actions",
         cell: ({ row }) => {
@@ -81,16 +81,15 @@ export const columns: ColumnDef<Forms>[] = [
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
+                            {/* <span className="sr-only">Open menu</span> */}
                             <IconDots className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem className="hover:cursor-pointer">Clone header only</DropdownMenuItem>
-                        <DropdownMenuItem className="hover:cursor-pointer">Clone this from</DropdownMenuItem>
-                        <DropdownMenuItem className="hover:cursor-pointer">Preview</DropdownMenuItem>
-
+                        <DropdownMenuItem className="hover:cursor-pointer">Copy header</DropdownMenuItem>
+                        <DropdownMenuItem className="hover:cursor-pointer">Make a copy</DropdownMenuItem>
+                        <DropdownMenuItem className="hover:cursor-pointer" onClick={() => window.open(`/api/nap-form-one-output/${form.nap_form_one_header_id}`, '_blank')}>Preview</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )

@@ -13,7 +13,7 @@ import {
 
 import { EditGroupValue } from './components/edit-group-value';
 import { useMemo } from 'react';
-import { IconCheck, IconPlus, IconChevronLeft, IconPencil, IconX, IconDeviceFloppy } from "@tabler/icons-react"
+import { IconCheck, IconPlus, IconChevronLeft, IconPencil, IconX, IconDeviceFloppy, IconRefresh } from "@tabler/icons-react"
 
 import Link from 'next/link';
 import * as React from 'react'
@@ -105,10 +105,15 @@ export default function Page({ params }: {
                                             ? {
                                                 retention_period_total: 'Permanent',
                                                 retention_period_active: 'Permanent',
-                                                retention_period_storage: 'Permanent    '
+                                                retention_period_storage: 'Permanent',
                                             }
-                                            : {
-                                            }),
+                                            : field === 'time_value'
+                                                ? {
+                                                    retention_period_total: '',
+                                                    retention_period_active: '',
+                                                    retention_period_storage: '',
+                                                }
+                                                : {}),
                                     }
                                     : item
                             ),
@@ -403,10 +408,32 @@ export default function Page({ params }: {
         }
 
     }
-    console.log('state>>>>>>>>>>', state)
+    const [isChanges, setIsChanges] = React.useState<boolean>(false)
+    // detect changes
+    React.useEffect(() => {
+        setIsChanges(JSON.stringify(state ?? "").length !== JSON.stringify(formData ?? "").length)
+    }, [state, formData])
+
+    const downloadAsPDF = async () => {
+        window.open(`/api/nap-form-one-output/${form_id}`, '_blank');
+        // try {
+        //     if (!form_id) return
+        //     const res = await fetch(`/api/nap-form-one-output/${form_id}`, {
+        //         method: 'GET',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         }
+        //     })
+        //     const res_data = await res.json()
+        //     return res_data;
+        // } catch (error) {
+        //     console.log('ERROR', error)
+        // } 
+    }
+
     return (
-        <Layout fixed className="flex flex-col overflow-auto">
-            <Layout.Header sticky className="bg-ghost border-solid border-b-[1px]">
+        <Layout >
+            <Layout.Header sticky >
                 <div className="flex flex-row justify-between gap-5 p-2">
                     <Button className="w-full" variant="outline">
                         <Link className="flex flex-row gap-2" href="/page/records-inventory">
@@ -415,24 +442,28 @@ export default function Page({ params }: {
                         </Link>
                     </Button>
                     <Button
+                        disabled={!isChanges}
+                        onClick={fetchFormDataFromDataverse}
+                        variant='outline'>
+                        <IconRefresh />
+                    </Button>
+                    <Button
                         disabled={isLoadingFormData}
-                        className="w-full flex flex-row gap-1"
+                        className="w-full flex flex-row gap-[7px] items-center justify-center"
                         variant="outline"
                         onClick={submitForm}
                     >
-                        <IconDeviceFloppy size={15} /> <span>Save</span>
+                        <IconDeviceFloppy size={14} /> <span>{isLoadingFormData ? "Please wait..." : "Save"}</span>
                     </Button>
-                    <Button variant='outline' disabled={!formData}>
-                        Discard changes
+
+                    <Button onClick={downloadAsPDF} variant='outline'>
+                        View as a PDF
                     </Button>
-                    <Button variant='outline'>
-                        Download as a PDF
-                    </Button>
-                    <PreviewNapFormOneDialog />
+                    {/* <PreviewNapFormOneDialog /> */}
                 </div>
             </Layout.Header>
-            <Layout.Body className=" flex flex-1 flex-row">
-
+            {/* className="flex flex-col overflow-auto"> */}
+            <Layout.Body >
                 <ResizablePanelGroup
                     direction="horizontal"
                     className="flex w-full min-h-[90dvh] rounded-lg "
@@ -502,7 +533,7 @@ export default function Page({ params }: {
                                                     handleChange={groupValueGetInputHandler}
                                                     inputHandlers={groupValueInputHandlers}
                                                     isEditing={is_editing} />
-                                                <Button disabled={is_single_unit || !is_editing}
+                                                <Button disabled={!is_single_unit || !is_editing}
                                                     size='sm' onClick={() => dispatch({ type: 'add_item', groupId: id })} className='rounded-lg w-fit flex flex-row gap-2' variant='ghost'>
                                                     <IconPlus size={16} />
                                                     <span>{items?.length} item/s</span>

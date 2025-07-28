@@ -17,7 +17,8 @@ export async function GET(req: NextRequest, { params }: { params: { form_id: str
             table: `${process.env.NAP_FORM_ONE_HEADERS_TABLE}`,
             query: `$filter=crc9f_nap_form_one_header_id eq '${formId}'`
         });
-
+        
+        if (!headerData.value) throw('Form is not existing')
 
         const groupData = await fetchFromDataverse({
             table: `${process.env.NAP_FORM_ONE_GROUPS_TABLE}`,
@@ -74,7 +75,8 @@ export async function GET(req: NextRequest, { params }: { params: { form_id: str
         }
         // return NextResponse.json({ success: true, groups: groupsWithItems, header: headerData.value });
 
-        const stream = await renderToStream(<NapFormOneDocument groups={groupsWithItems} header={headerData.value} />);
+        
+        const stream = await renderToStream(<NapFormOneDocument groups={groupsWithItems} header={stripPrefixFromKeys(headerData.value)} />);
 
         return new Response(stream as unknown as ReadableStream, {
             headers: {

@@ -15,6 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body >
+        {/* storageKey=vite-ui-theme */}
         <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
           <AuthProvider >
             {children}

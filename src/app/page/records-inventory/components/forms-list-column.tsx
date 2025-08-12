@@ -11,10 +11,12 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
+import SubmitFormDialog from "./submit-form-dialog"
 // This type is used to define the shape of our data.
 
 export type Forms = {
-    nap_form_one_header_id: number
+    nap_form_one_header_id: number;
+    rcs_nap_form_one_headerid: string;
     form_name: string
     modifiedon: string
     status: "draft" | "submitted" | "for revision" | "cancelled" | string
@@ -39,11 +41,16 @@ export const columns: ColumnDef<Forms>[] = [
         cell: (({ row }) => {
             const form = row.original;
             return (
-                <Button variant='link' >
-                    {/* <Link href={`/page/records-inventory/${form.id}`}>{form.id}</Link> */}
-                    <Link className="font-bold w-full text-blue-500" href={`/page/records-inventory/${form.nap_form_one_header_id}`} >{form.nap_form_one_header_id}</Link>
+                <>
+                    {
+                        form.status == 'draft' ?
+                            <Button variant='link' className="w-full ">
+                                {/* <Link href={`/page/records-inventory/${form.id}`}>{form.id}</Link> */}
+                                <Link className="font-bold w-full text-blue-500" href={`/page/records-inventory/${form.nap_form_one_header_id}`} >{form.nap_form_one_header_id}</Link>
 
-                </Button>
+                            </Button> : <p className="font-bold w-full text-gray-500 text-center">{form.nap_form_one_header_id}</p>
+                    }
+                </>
             )
         })
     },
@@ -76,7 +83,7 @@ export const columns: ColumnDef<Forms>[] = [
         id: "actions",
         cell: ({ row }) => {
             const form = row.original
-
+            // console.log('-------------------', form)
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -88,7 +95,26 @@ export const columns: ColumnDef<Forms>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem className="hover:cursor-pointer">Copy header</DropdownMenuItem>
-                        <DropdownMenuItem className="hover:cursor-pointer">Make a copy</DropdownMenuItem>
+                        {
+                            form.status == 'draft' ?
+                                <DropdownMenuItem
+                                    onSelect={(e) => {
+                                        const originalEvent = (e as any).detail?.originalEvent;
+                                        if (originalEvent instanceof KeyboardEvent && originalEvent.key === " ") {
+                                            // allow space to work in inputs
+                                            return;
+                                        }
+                                        e.preventDefault();
+                                    }}
+                                    className="hover:cursor-pointer"
+                                >
+                                    <SubmitFormDialog
+                                        headerGuid={form.rcs_nap_form_one_headerid}
+                                        headerId={`${form.nap_form_one_header_id}`}
+                                    />
+                                </DropdownMenuItem>
+                                : null
+                        }
                         <DropdownMenuItem className="hover:cursor-pointer" onClick={() => window.open(`/api/nap-form-one-output/${form.nap_form_one_header_id}`, '_blank')}>Preview</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

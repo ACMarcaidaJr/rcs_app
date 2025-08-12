@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useAuth } from '@/context/MsalProvider'
 import Link from 'next/link'
+import { IconChevronRight, IconPower } from '@tabler/icons-react'
 export function UserNav() {
   const { account, login, loading, logout } = useAuth();
 
@@ -39,16 +40,21 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem  >
-            <Link href='/page/profile'><p>Profile</p></Link>
+          <DropdownMenuItem className='flex flex-row justify-between w-full'  >
+            <Button variant="ghost" className='h-full w-full '>
+              <Link className='h-full w-full flex items-start justify-start  m-0' href='/page/profile'><p>Profile</p></Link>
+            </Button>
+            <DropdownMenuShortcut><IconChevronRight /></DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className='hover:cursor-pointer' onClick={logout}>
-          Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+        <DropdownMenuItem className=' flex flex-row justify-between w-full' onClick={logout}>
+          <Button variant="ghost" className='h-full w-full flex items-start justify-start rounded-sm'>
+            Log out
+          </Button>
+          <DropdownMenuShortcut> <IconPower /></DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
-    </DropdownMenu>
+    </DropdownMenu >
   )
 }

@@ -82,7 +82,7 @@ export default function NewFormDialog() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!values) return
     setLoading(true)
-    const res = await fetch('/api/nap-forom-one-header', {
+    const res = await fetch('/api/nap-form-one-header', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -92,6 +92,7 @@ export default function NewFormDialog() {
     const json_data = await res.json()
     setLoading(false)
     if (!json_data?.error) {
+      form.reset()
       setOpen(false)
       toast({
         title: json_data?.message_title,

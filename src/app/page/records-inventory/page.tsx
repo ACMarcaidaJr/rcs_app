@@ -1,16 +1,6 @@
 'use client'
 import { Layout } from "@/components/custom/layout"
 import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
-import {
     Card,
     CardHeader,
     CardFooter,
@@ -18,55 +8,13 @@ import {
     CardDescription,
     CardContent
 } from '@/components/ui/card'
-import { Badge, badgeVariants } from "@/components/ui/badge"
+
 import React from "react"
-import { IconFilter, IconPlus, IconMenu3, IconFilter2, IconSearch } from "@tabler/icons-react"
-import { cn } from '@/lib/utils'
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from "@/components/custom/button"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { Search } from "@/components/search"
-import Link from "next/link";
-import NewFormDialog from "./components/new-form-dialog";
 
-
-const form_data = [
-    {
-        id: 1001,
-        form_name: 'name of the Form',
-        edited: '17 June 2025',
-        status: 'draft',
-    },
-    {
-        id: 1002,
-        form_name: 'Title of the Form',
-        edited: '17 June 2025',
-        status: 'draft',
-    },
-    {
-        id: 1003,
-        form_name: 'Title of the Form that can be so long t can be so long',
-        edited: '27 June 2025',
-        status: 'draft',
-    },
-    {
-        id: 1004,
-        form_name: 'Name of the Form',
-        edited: '21 June 2025',
-        status: 'draft',
-    },
-]
 
 import { columns, Forms } from "./components/forms-list-column"
 import { DataTable } from "./components/forms-data-table"
-import { useFetch } from "@/hooks/use-fetch";
 import SubmitFormDialog from "./components/submit-form-dialog";
-
 
 export default function Page() {
 
@@ -79,7 +27,7 @@ export default function Page() {
         try {
             console.log('fetching forms')
             setIsLoadingForms(true)
-            const res = await fetch('/api/nap-form-one-edit')
+            const res = await fetch('/api/nap-form-one-header')
             const data = await res.json()
             setFormData(data?.data)
 
@@ -94,6 +42,7 @@ export default function Page() {
     React.useEffect(() => {
         fetchForms()
     }, [])
+    console.log('formData',formData)
     return (
         <Layout fixed className="bg-ghost">
             <Layout.Header sticky className="bg-ghost">
@@ -112,8 +61,8 @@ export default function Page() {
                                 <p><strong>Due Date:</strong> August 10, 2025</p>
                                 <p><strong>Status:</strong> Ongoing</p>
                                 <div className="flex flex-row items-center gap-1 h-fit"><strong>Submitted:</strong>
-                                    <SubmitFormDialog />
-                                </div>
+                                    {/* <SubmitFormDialog /> */}
+                                </div>  
                             </div>
                         </CardContent>
                     </Card>

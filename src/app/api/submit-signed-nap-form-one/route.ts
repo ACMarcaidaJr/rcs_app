@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
         const office_id = formData.get('office_id');
         const nap_form_one_header_id = formData.get('nap_form_one_header_id');
         const rcs_nap_form_one_headerid = formData.get('rcs_nap_form_one_headerid');
+        const rcs_announcement_notices_id = formData.get('rcs_announcement_notices_id')
 
-    
         if (!signedFile) {
             throw new Error('No file provided.');
         }
@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
             remarks: remarks,
             user_name: user_name,
             office_id: office_id,
+            rcs_announcement_notices_id,
             nap_form_one_header_id: nap_form_one_header_id,
         };
 

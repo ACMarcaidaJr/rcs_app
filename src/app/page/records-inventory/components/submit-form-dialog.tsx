@@ -104,19 +104,42 @@ export default function SubmitFormDialog({ headerId, headerGuid }: { headerId?: 
             setIsLoadingOffices(false)
         }
     }
+    const [isLoadingAnnouncements, setIsLoadingAnnouncements] = React.useState<boolean>(false)
+    const [announcementsData, setAnnouncementsData] = React.useState<[]>();
+
+    const fetchAnnouncements = async () => {
+        try {
+            try {
+                setIsLoadingAnnouncements(true)
+                const res = await fetch('/api/announcement-notice')
+                const data = await res.json()
+                setAnnouncementsData(data?.data)
+
+            } catch (error) {
+                console.log('error', error)
+            } finally {
+                setIsLoadingAnnouncements(false)
+            }
+        } catch (error) {
+        }
+    }
+
 
     React.useEffect(() => {
         if (!open) {
+            setAnnouncementsData(undefined)
             setOfficesData(undefined)
+            form.reset()
             return
         }
+        fetchAnnouncements()
         fetchForms()
     }, [open])
     // console.log("form", form)
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="ghost" className='h-full w-full flex items-start justify-start rounded-sm font-normal p-0'>Submit</Button>
+                <Button variant="ghost" className='h-full w-full flex items-start justify-start rounded-sm font-normal p-2'>Submit</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
@@ -125,7 +148,7 @@ export default function SubmitFormDialog({ headerId, headerGuid }: { headerId?: 
                 </DialogHeader>
 
                 {
-                    isLoadingOffices ?
+                    isLoadingOffices && isLoadingAnnouncements ?
                         <div className='flex flex-col gap-5'>
                             <p>Please wait...</p>
                             <Skeleton className='h-[40px] min-w-[400px]rounded-lg' />
@@ -173,7 +196,34 @@ export default function SubmitFormDialog({ headerId, headerGuid }: { headerId?: 
                                         </FormItem>
                                     )}
                                 />
-
+                                {/* rcs_announcement_notices_id */}
+                                <FormField
+                                    control={form.control}
+                                    name="announcement_notice_id"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Compliance Notice</FormLabel>
+                                            <FormControl>
+                                                <Select
+                                                    onValueChange={field.onChange}
+                                                    value={field.value}
+                                                >
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select Notice" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {announcementsData?.map((announcement: any) => (
+                                                            <SelectItem key={announcement.rcs_announcement_notices_id} value={announcement.rcs_announcement_notices_id}>
+                                                                {announcement.notice_title}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
                                 <FormField
                                     control={form.control}

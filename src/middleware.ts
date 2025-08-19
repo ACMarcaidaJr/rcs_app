@@ -4,7 +4,7 @@ import { handleApiError } from "./lib/api-error";
 export async function middleware(req: NextRequest) {
     const url = req.nextUrl.clone();
     const path = url.pathname;
-
+    console.log('running middleware:')
     // Only guard /page/* routes
     if (path.startsWith("/page/")) {
         const userModulesCookie = req.cookies.get("user_modules")?.value;
@@ -40,7 +40,6 @@ export async function middleware(req: NextRequest) {
                     url.pathname = allowedPaths[0];
                     return NextResponse.redirect(url);
                 }
-
             } catch (err) {
                 handleApiError(err, req, "No User Role")
                 // console.error("Invalid user_modules cookie:", err);

@@ -11,14 +11,14 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
-import SubmitFormDialog from "./submit-form-dialog"
-// This type is used to define the shape of our data.
+import SubmitFormDialog from "./submit-form-dialog";
+import * as React from 'react'
 
 export type Forms = {
     nap_form_one_header_id: number;
     rcs_nap_form_one_headerid: string;
-    form_name: string
-    modifiedon: string
+    form_name: string;
+    modifiedon: string;
     status: "draft" | "submitted" | "for revision" | "cancelled" | string
 }
 
@@ -70,7 +70,7 @@ export const columns: ColumnDef<Forms>[] = [
         },
     },
     {
-        accessorKey: "modifiedon",
+        accessorKey: "edited",
         header: "Edited",
     },
     {
@@ -83,7 +83,6 @@ export const columns: ColumnDef<Forms>[] = [
         id: "actions",
         cell: ({ row }) => {
             const form = row.original
-            // console.log('-------------------', form)
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -97,22 +96,13 @@ export const columns: ColumnDef<Forms>[] = [
                         <DropdownMenuItem className="hover:cursor-pointer">Copy header</DropdownMenuItem>
                         {
                             form.status == 'draft' ?
-                                <DropdownMenuItem
-                                    onSelect={(e) => {
-                                        const originalEvent = (e as any).detail?.originalEvent;
-                                        if (originalEvent instanceof KeyboardEvent && originalEvent.key === " ") {
-                                            // allow space to work in inputs
-                                            return;
-                                        }
-                                        e.preventDefault();
-                                    }}
-                                    className="hover:cursor-pointer"
-                                >
+                                <DropdownMenuItem asChild className="">
                                     <SubmitFormDialog
                                         headerGuid={form.rcs_nap_form_one_headerid}
                                         headerId={`${form.nap_form_one_header_id}`}
                                     />
                                 </DropdownMenuItem>
+
                                 : null
                         }
                         <DropdownMenuItem className="hover:cursor-pointer" onClick={() => window.open(`/api/nap-form-one-output/${form.nap_form_one_header_id}`, '_blank')}>Preview</DropdownMenuItem>

@@ -21,7 +21,7 @@ export default function Page() {
     // const { data, error, isLoading } = useFetch('/api/nap-form-one-edit')
     // console.log('data, error, isLoading', data, error, isLoading)
     const [isLoadingforms, setIsLoadingForms] = React.useState<boolean>(false)
-    const [formData, setFormData] = React.useState<[]>()
+    const [formData, setFormData] = React.useState<[]>([])
 
     const fetchForms = async () => {
         try {
@@ -67,7 +67,7 @@ export default function Page() {
                         </CardContent>
                     </Card>
                     <div className="flex flex-col gap-5 md:rounded-lg md:border md:border-secondary md:p-6" >
-                        <DataTable fetchForms={fetchForms} isloading={isLoadingforms} columns={columns} data={formData ?? []} />
+                        <DataTable fetchForms={fetchForms} isloading={isLoadingforms} columns={columns} data={formData} />
                     </div>
                 </div>
             </Layout.Body>

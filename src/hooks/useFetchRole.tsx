@@ -1,5 +1,7 @@
 'use client';
 import { useEffect } from 'react';
+import Cookies from "js-cookie";
+import { useAuth } from '@/context/MsalProvider';
 
 interface UserClaims {
   preferred_username?: string;
@@ -14,36 +16,43 @@ interface RoleResponse {
   modules: any[];
 }
 
-export const useFetchRole = (account: { idTokenClaims?: UserClaims } | null) => {
+export const useFetchRole = (account: { idTokenClaims?: UserClaims } | null, loading: boolean) => {
   useEffect(() => {
-    const getRole = async () => {
-      if (!account?.idTokenClaims?.preferred_username) return;
+    if (!account?.idTokenClaims?.preferred_username && !loading) {
+      Cookies.remove("user_and_modules");
+      window.localStorage.removeItem("user_modules")
+      return;
+    }
 
+    const fetchRole = async () => {
       try {
         const res = await fetch('/api/sign-in-user', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            user_name: account.idTokenClaims.preferred_username,
-            given_name: account.idTokenClaims.given_name,
-            family_name: account.idTokenClaims.family_name,
-            user_email: account.idTokenClaims.email,
+            user_name: account?.idTokenClaims?.preferred_username,
+            given_name: account?.idTokenClaims?.given_name,
+            family_name: account?.idTokenClaims?.family_name,
+            user_email: account?.idTokenClaims?.email,
           }),
         });
 
-        const result: RoleResponse = await res.json();
-        console.log('getRole response', result);
-
-        if (result.success && result.modules) {
+        const result = await res.json();
+        console.log('user_modules>>>', result.user_modules)
+        if (result.success) {
           localStorage.setItem('user_modules', JSON.stringify(result.modules));
+        } else {
+          Cookies.remove("user_and_modules");
+          window.localStorage.removeItem("user_modules")
         }
-      } catch (error) {
-        console.error('Error fetching user role:', error);
+      } catch (err) {
+        console.error('Error:', err);
+        Cookies.remove("user_and_modules");
+        window.localStorage.removeItem("user_modules")
       }
     };
 
-    getRole();
+    fetchRole();
   }, [account]);
+
 };

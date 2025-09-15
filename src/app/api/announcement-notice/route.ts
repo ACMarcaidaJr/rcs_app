@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
     try {
         const user = getUniqueNameFromCookie(req);
         const user_name = user?.email;
+        const rcs_userid = user?.rcs_userid
         const formData = await req.formData();
         const notice_title = formData.get('notice_title')
         const notice_description = formData.get('notice_description')
@@ -25,11 +26,9 @@ export async function POST(req: NextRequest) {
             notice_description: notice_description,
             inclusive_year_start: inclusive_year_start,
             inclusive_year_end: inclusive_year_end,
-            created_by: user_name,
+            "user_id@odata.bind": `/${process.env.USER_TABLE}(${rcs_userid})`,
             "role_id@odata.bind": `/${process.env.ROLE_TABLE}(${rcs_roleid})`
         };
-        console.log('metadata', metadata)
-        console.log('supporting_document', supporting_document)
         const created = await fetchFromDataverse({
             table: process.env.NAP_FORM_ONE_COMPLIANCE_NOTICE!,
             method: 'POST',
@@ -37,7 +36,7 @@ export async function POST(req: NextRequest) {
         });
         const recordId = created.crc9f_rcs_announcement_noticeid;
         console.log('created', created)
-        const upload = await uploadFileToDataverse({
+        await uploadFileToDataverse({
             table: process.env.NAP_FORM_ONE_COMPLIANCE_NOTICE!,
             recordId,
             column: 'crc9f_supporting_document',
@@ -57,14 +56,13 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
     try {
         const user_account = getUniqueNameFromCookie(req)
-        const data = await fetchFromDataverse({
-            table: `${process.env.NAP_FORM_ONE_COMPLIANCE_NOTICE}`,
-            query: `$filter=crc9f_created_by eq '${user_account?.email}'`
+        const notices = await fetchFromDataverse({
+            table: process.env.NAP_FORM_ONE_COMPLIANCE_NOTICE!,
+            query: `$filter=_crc9f_user_id_value eq ${user_account?.rcs_userid}`
         })
-
         const response = NextResponse.json({
             success: true,
-            data: stripPrefixFromKeys(data.value),
+            data: stripPrefixFromKeys(notices.value),
             message_title: 'Success',
             message: 'Successfully fetch the offces',
         });

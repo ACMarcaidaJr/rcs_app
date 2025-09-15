@@ -3,6 +3,7 @@ import { fetchFromDataverse } from '@/lib/fetchFromDataverse';
 import { handleApiError } from '@/lib/api-error';
 import { prefixKeysWithCrc9f } from '@/lib/prefixKey';
 import { getUniqueNameFromCookie } from '@/lib/get-user-unique-name-from-cookie';
+import { stripPrefixFromKeys } from '@/lib/strip-prefix-from-keys';
 
 export async function POST(req: NextRequest) {
     try {
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest) {
             table: `${process.env.USER_TABLE}`,
             query: `$filter=crc9f_user_name eq '${user_name}'`
         });
-
+        console.log('user_data>>>>>>', user_data)
         // if user is not exist in the table then execute
         if (!user_data?.value[0]?.crc9f_user_id) {
             await fetchFromDataverse({
@@ -34,21 +35,13 @@ export async function POST(req: NextRequest) {
         // get all module_ids from module_role table that equal to the role_id
         const role_id = user_role_data?.value[0]?.crc9f_role_id
         // IF ROLE THEN FETCH FROM MODULE_ROLES AND ROLES
+        console.log('role_id>>>>', role_id)
         if (role_id) {
             const module_role_data = await fetchFromDataverse({
                 table: `${process.env.MODULE_ROLE_TABLE}`,
                 query: `$filter=crc9f_role_id eq '${role_id}'`
 
             })
-
-            // // get all modules from module table
-            // const module_id = module_role_data?.value[0]?.crc9f_module_id
-            // console.log('module_id', module_id)
-            // const module_data = await fetchFromDataverse({
-            //     table: `${process.env.MODULE_TABLE}`,
-            //     query: `$filter=crc9f_mod    ule_id eq '${module_id}'`
-
-            // })
             const module_ids = module_role_data?.value.map((item: any) => item.crc9f_module_id).filter(Boolean);
 
             const moduleFilter = module_ids.map((id: string) => `crc9f_module_id eq '${id}'`).join(' or ');
@@ -71,8 +64,18 @@ export async function POST(req: NextRequest) {
                 modules: cleaned_modules,
                 message: 'Successfully fetching Authorizing the user',
             });
-
-            response.cookies.set('user_modules', JSON.stringify(cleaned_modules), {
+            const cleaned_user = stripPrefixFromKeys(user_data?.value)
+            const user_and_modules = {
+                modules: cleaned_modules,
+                user: {
+                    user_email: cleaned_user[0].user_email,
+                    given_name: cleaned_user[0].given_name,
+                    family_name: cleaned_user[0].family_name,
+                    user_name: cleaned_user[0].user_name,
+                    rcs_userid: cleaned_user[0].rcs_userid,
+                }
+            }
+            response.cookies.set('user_and_modules', JSON.stringify(user_and_modules), {
                 httpOnly: false,
                 sameSite: 'lax',
                 secure: true,

@@ -1,20 +1,22 @@
 import { NextRequest } from "next/server";
 
-export function getUniqueNameFromCookie(req: NextRequest): { email?: string; raw?: any } | null {
-    const token = req.cookies.get('rcs_access_token')?.value;
-    if (!token) return null;
+export function getUniqueNameFromCookie(
+  req: NextRequest
+): { email?: string; rcs_userid?: string; raw?: any } | null {
+  const token = req.cookies.get("user_and_modules")?.value;
+  // console.log("token", token);
+  if (!token) return null;
 
-    try {
-        // JWT format: header.payload.signature
-        const [, payloadBase64] = token.split('.');
-        const payloadJson = Buffer.from(payloadBase64, 'base64').toString('utf-8');
-        const decoded = JSON.parse(payloadJson);
-        return {
-            email: decoded?.unique_name ,
-            raw: decoded,
-        };
-    } catch (err) {
-        console.error('❌ Failed to decode JWT payload from rcs_access_token cookie:', err);
-        return null;
-    }
+  try {
+    const decoded = JSON.parse(token); // it's plain JSON, not JWT
+    // console.log("decoded===============================>>>>>", decoded);
+    return {
+      email: decoded?.user?.user_email,
+      rcs_userid: decoded?.user?.rcs_userid,
+      raw: decoded,
+    };
+  } catch (err) {
+    console.error("❌Failed to parse JSON cookie:", err);
+    return null;
+  }
 }

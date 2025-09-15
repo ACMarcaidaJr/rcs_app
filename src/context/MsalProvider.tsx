@@ -45,16 +45,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             ...loginRequest,
             account: activeAccount,
           });
-
+          console.log('activeAccount>>>>', activeAccount)
+          // useFetchRole(activeAccount)
           // Store token in cookie
-          Cookies.set("rcs_access_token", tokenResponse.accessToken, {
-            secure: true,
-            sameSite: "strict",
-            path: "/",
-          });
-          console.log('activeAccountactiveAccount', activeAccount)
-
-
+          // Cookies.set("rcs_access_token", tokenResponse.accessToken, {
+          //   secure: true,
+          //   sameSite: "strict",
+          //   path: "/",
+          //   maxAge: 60 * 60 * 24 * 7,
+          // });
+          // console.log('activeAccountactiveAccount', activeAccount)
         }
       } catch (error) {
         console.error("Auth redirect error", error);
@@ -62,12 +62,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setLoading(false);
       }
     };
-
     checkAccount();
   }, []);
-
-// get user-modules and store it on the local storage
-  useFetchRole(account)
+  // console.log('it should be running')
+  // useFetchRole(account, loading)
 
   const login = async () => {
     try {
@@ -79,9 +77,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logout = () => {
-    Cookies.remove("rcs_access_token");
-    Cookies.remove("user_modules");
-    window.localStorage.removeItem("user_modules")
+    // Cookies.remove("rcs_access_token");
+    Cookies.remove("user_and_modules");
+    window.localStorage.removeItem("user_modules") // modules only
     msalInstance.logoutRedirect().finally(() => {
       router.push("/");
     });

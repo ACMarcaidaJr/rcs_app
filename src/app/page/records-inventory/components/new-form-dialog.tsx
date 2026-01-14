@@ -114,8 +114,8 @@ export default function NewFormDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button onClick={() => setOpen(true)} className="flex flex-row justify-between w-fit gap-2 hover:cursor-pointer" variant='outline'>
+         <IconPlus />
           <p>New Form</p>
-          <IconPlus />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-5xl w-full max-h-[90vh] overflow-y-auto">

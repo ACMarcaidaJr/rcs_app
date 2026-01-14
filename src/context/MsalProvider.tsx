@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkAccount();
   }, []);
   // console.log('it should be running')
-  // useFetchRole(account, loading)
+  useFetchRole(account, loading)
 
   const login = async () => {
     try {

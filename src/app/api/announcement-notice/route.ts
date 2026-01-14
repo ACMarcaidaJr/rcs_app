@@ -12,20 +12,20 @@ import { stripPrefixFromKeys } from '@/lib/strip-prefix-from-keys';
 export async function POST(req: NextRequest) {
     try {
         const user = getUniqueNameFromCookie(req);
-        const user_name = user?.email;
+          const user_name = user?.email;
         const rcs_userid = user?.rcs_userid
         const formData = await req.formData();
         const notice_title = formData.get('notice_title')
         const notice_description = formData.get('notice_description')
-        const inclusive_year_start = formData.get('inclusive_year_start')
-        const inclusive_year_end = formData.get('inclusive_year_end')
+        const year_covered = formData.get('year_covered')
+        const deadline_of_submission = formData.get('deadline_of_submission')
         const supporting_document = formData.get('supporting_document') as File
         const rcs_roleid = formData.get('rcs_roleid')
         const metadata = {
             notice_title: notice_title,
             notice_description: notice_description,
-            inclusive_year_start: inclusive_year_start,
-            inclusive_year_end: inclusive_year_end,
+            year_covered: year_covered,
+            deadline_of_submission: deadline_of_submission,
             "user_id@odata.bind": `/${process.env.USER_TABLE}(${rcs_userid})`,
             "role_id@odata.bind": `/${process.env.ROLE_TABLE}(${rcs_roleid})`
         };

@@ -30,7 +30,6 @@ export async function POST(req: NextRequest) {
         const user_role_data = await fetchFromDataverse({
             table: `${process.env.USER_ROLE_TABLE}`,
             query: `$filter=crc9f_user_name eq '${user_name}'`
-
         })
         // get all module_ids from module_role table that equal to the role_id
         const role_id = user_role_data?.value[0]?.crc9f_role_id

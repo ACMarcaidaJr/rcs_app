@@ -46,8 +46,8 @@ export default function NewAnnouncementDialog() {
             notice_title: '',
             rcs_roleid: '',
             notice_description: '',
-            inclusive_year_start: '',
-            inclusive_year_end: '',
+            year_covered: '',
+            deadline_of_submission: '',
         },
     })
     async function onSubmit(values: z.infer<typeof AnnouncementsSchema>) {
@@ -113,7 +113,7 @@ export default function NewAnnouncementDialog() {
         }
         fetchRoles()
     }, [open])
-    console.log('rolesData',rolesData)
+    console.log('rolesData', rolesData)
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
@@ -167,10 +167,10 @@ export default function NewAnnouncementDialog() {
                                     />
                                     <FormField
                                         control={form.control}
-                                        name="inclusive_year_start"
+                                        name="year_covered"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Inclusive Year Start</FormLabel>
+                                                <FormLabel>Year Covered</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         type="number"
@@ -190,21 +190,15 @@ export default function NewAnnouncementDialog() {
                                     />
                                     <FormField
                                         control={form.control}
-                                        name="inclusive_year_end"
+                                        name="deadline_of_submission"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Inclusive Year End</FormLabel>
+                                                <FormLabel>Deadline of Submission</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number"
-                                                        placeholder="Enter Year"
-                                                        min="1900"
-                                                        max="2100"
-                                                        onChange={(e) => {
-                                                            const year = e.target.value.replace(/\D/g, '');
-                                                            field.onChange(year);
-                                                        }}
-                                                        value={field.value || ""}
+                                                        type="date"
+                                                        placeholder="Enter date"
+                                                        {...field}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -235,8 +229,8 @@ export default function NewAnnouncementDialog() {
                                             </FormItem>
                                         )}
                                     />
-                          
-                                    
+
+
                                     <FormField
                                         control={form.control}
                                         name="rcs_roleid"

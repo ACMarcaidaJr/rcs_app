@@ -18,8 +18,8 @@ export type Announcements = {
     nap_form_one_compliance_notices_id: number;
     notice_title: string;
     notice_description: string;
-    inclusive_year_start: string;
-    inclusive_year_end: string;
+    year_covered: string;
+    deadline_of_submission: string;
     // supporting_document: File;
 }
 
@@ -38,12 +38,22 @@ export const columns: ColumnDef<Announcements>[] = [
         header: "Notice Description",
     },
     {
-        accessorKey: "inclusive_year_start",
-        header: "Inclusive Year Start",
+        accessorKey: "year_covered",
+        header: "Year Covered",
     },
     {
-        accessorKey: "inclusive_year_end",
-        header: "Inclusive Year End",
+        accessorKey: "deadline_of_submission",
+        header: "Deadline of Submission",
+        cell: ({ row }) => {
+            const form = row.original;
+            const date = new Date(form.deadline_of_submission);
+            const humanReadable = date.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            });
+            return <p>{humanReadable}</p>
+        }
     },
 
 ]

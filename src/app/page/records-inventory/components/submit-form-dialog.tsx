@@ -135,7 +135,7 @@ export default function SubmitFormDialog({ headerId, headerGuid }: { headerId?: 
         fetchAnnouncements()
         fetchForms()
     }, [open])
-    // console.log("form", form)
+    console.log("announcementsData", announcementsData)
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
@@ -196,8 +196,35 @@ export default function SubmitFormDialog({ headerId, headerGuid }: { headerId?: 
                                         </FormItem>
                                     )}
                                 />
-                                {/* rcs_announcement_notices_id */}
                                 <FormField
+                                    control={form.control}
+                                    name="rcs_announcement_noticeid"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Compliance Notice</FormLabel>
+                                            <FormControl>
+                                                <Select
+                                                    onValueChange={field.onChange}
+                                                    value={field.value}
+                                                >
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select Notice" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {announcementsData?.map((ann: any) => (
+                                                            <SelectItem key={ann.rcs_announcement_noticeid} value={ann.rcs_announcement_noticeid}>
+                                                                {ann.notice_title}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                {/* rcs_announcement_notices_id */}
+                                {/* <FormField
                                     control={form.control}
                                     name="announcement_notice_id"
                                     render={({ field }) => (
@@ -223,7 +250,7 @@ export default function SubmitFormDialog({ headerId, headerGuid }: { headerId?: 
                                             <FormMessage />
                                         </FormItem>
                                     )}
-                                />
+                                /> */}
 
                                 <FormField
                                     control={form.control}

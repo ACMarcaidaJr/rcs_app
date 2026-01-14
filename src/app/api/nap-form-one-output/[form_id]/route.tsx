@@ -11,7 +11,6 @@ export async function GET(req: NextRequest, { params }: { params: { form_id: str
 
         const formId = await params.form_id
 
-        console.log('formId', formId)
 
         const headerData = await fetchFromDataverse({
             table: `${process.env.NAP_FORM_ONE_HEADERS_TABLE}`,

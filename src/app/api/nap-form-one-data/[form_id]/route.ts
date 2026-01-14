@@ -6,9 +6,6 @@ import { stripPrefixFromKeys } from '@/lib/strip-prefix-from-keys';
 export async function GET(req: NextRequest, { params }: { params: { form_id: string } }) {
     try {
         const formId = await params.form_id
-
-
-
         const groupData = await fetchFromDataverse({
             table: `${process.env.NAP_FORM_ONE_GROUPS_TABLE}`,
             query: `$filter=crc9f_nap_form_one_header_id eq ${formId}`

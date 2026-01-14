@@ -14,9 +14,9 @@ export async function POST(req: NextRequest) {
         const remarks = formData.get('remarks')
         const signedFile = formData.get('signed_nap_form_one_file') as File;
         const office_id = formData.get('office_id');
-        const nap_form_one_header_id = formData.get('nap_form_one_header_id');
-        const rcs_nap_form_one_headerid = formData.get('rcs_nap_form_one_headerid');
-        const rcs_announcement_notices_id = formData.get('rcs_announcement_notices_id')
+        const nap_form_one_header_id = formData.get('nap_form_one_header_id'); // id
+        const rcs_nap_form_one_headerid = formData.get('rcs_nap_form_one_headerid'); // guid
+        const rcs_announcement_noticeid = formData.get('rcs_announcement_noticeid') // guid
 
         if (!signedFile) {
             throw new Error('No file provided.');
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
         const fileName = signedFile.name;
 
         if (fileBytes.length >= 134_217_728) { // 128 MB
-            throw new Error('File too large for single-request upload. Use chunked upload instead.');
+            throw new Error('File too large for single-request upload.');
         }
 
         const access_token = await getDataverseAccessToken();
@@ -38,8 +38,10 @@ export async function POST(req: NextRequest) {
             remarks: remarks,
             user_name: user_name,
             office_id: office_id,
-            rcs_announcement_notices_id,
-            nap_form_one_header_id: nap_form_one_header_id,
+            "announcement_notice_id@odata.bind": `/${process.env.NAP_FORM_ONE_COMPLIANCE_NOTICE}(${rcs_announcement_noticeid})`,
+            "nap_form_one_header_id@odata.bind": `/${process.env.NAP_FORM_ONE_HEADERS_TABLE}(${rcs_nap_form_one_headerid})`,
+
+            // nap_form_one_header_id: nap_form_one_header_id,
         };
 
         const created = await fetchFromDataverse({

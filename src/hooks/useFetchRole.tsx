@@ -17,6 +17,7 @@ interface RoleResponse {
 }
 
 export const useFetchRole = (account: { idTokenClaims?: UserClaims } | null, loading: boolean) => {
+  // console.log('RUNNNNNNNNNNNNNNNNINGGGGGGG')
   useEffect(() => {
     if (!account?.idTokenClaims?.preferred_username && !loading) {
       Cookies.remove("user_and_modules");

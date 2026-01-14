@@ -46,8 +46,6 @@ export function DataTable<TData, TValue>({
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
     )
-
-
     const table = useReactTable({
         data,
         columns,
@@ -63,11 +61,13 @@ export function DataTable<TData, TValue>({
         },
     })
 
-
     return (
         <div className="flex flex-col gap-3">
+            <div>
+                <p className="font-bold">My NAP Form(s) No. 1</p>
+            </div>
             <div className="flex gap-3 items-center ">
-                <Button onClick={fetchForms} variant='outline' className='p-1'><IconRefresh /></Button>
+                <Button onClick={fetchForms} variant='outline' className='px-4 flex gap-3'><IconRefresh />Refresh</Button>
                 <NewFormDialog />
                 <Input
                     placeholder="Filter form name"
@@ -109,10 +109,7 @@ export function DataTable<TData, TValue>({
                                         {row.getVisibleCells().map((cell) => (
                                             <TableCell className="max-w-[200px] truncate whitespace-nowrap overflow-hidden text-ellipsis" key={cell.id}>
                                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                            </TableCell>
-                                            // <TableCell className="truncate"  key={cell.id}>
-                                            //     {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                            // </TableCell>
+                                            </TableCell>    
                                         ))}
                                     </TableRow>
                                 ))

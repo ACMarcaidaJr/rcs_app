@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
         const req_body = await req.json();
         const user = getUniqueNameFromCookie(req)
         const user_name = user?.email
+        console.log('user_name', user_name)
         if (!user_name) throw ('Sorry, something went wrong')
         const mergedBody = {
             ...req_body,

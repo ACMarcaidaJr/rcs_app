@@ -1,5 +1,5 @@
 "use client"
-import { IconDots, IconArrowsUpDown } from "@tabler/icons-react"
+import { IconDots, IconArrowsUpDown, IconEdit, IconEditCircle, IconUser } from "@tabler/icons-react"
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/custom/button"
 import {
@@ -19,6 +19,8 @@ export type Forms = {
     rcs_nap_form_one_headerid: string;
     form_name: string;
     modifiedon: string;
+    assisted_by: string;
+    approved_by: string;
     status: "draft" | "submitted" | "for revision" | "cancelled" | string
 }
 
@@ -30,7 +32,7 @@ export const columns: ColumnDef<Forms>[] = [
             return (
                 <Button
                     variant="ghost"
-                    className="m-0 p-0"
+                    className="hover:bg-transparent"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     ID
@@ -43,12 +45,23 @@ export const columns: ColumnDef<Forms>[] = [
             return (
                 <>
                     {
-                        form.status == 'draft' ?
-                            <Button variant='link' className="w-full ">
-                                {/* <Link href={`/page/records-inventory/${form.id}`}>{form.id}</Link> */}
-                                <Link className="font-bold w-full text-blue-500" href={`/page/records-inventory/${form.nap_form_one_header_id}`} >{form.nap_form_one_header_id}</Link>
-
-                            </Button> : <p className="font-bold w-full text-gray-500 text-center">{form.nap_form_one_header_id}</p>
+                        form?.status == 'draft' ?
+                            <div className="flex flex-row gap-3 items-center">
+                                <Button className="" variant='link'>
+                                    <Link className="font-bold w-full text-blue-600" href={`/page/records-inventory/${form.nap_form_one_header_id}`} >
+                                        <IconEdit />
+                                    </Link>
+                                </Button>
+                                <p>{form.nap_form_one_header_id}</p>
+                            </div>
+                            : <div className="flex flex-row gap-3 items-center">
+                                <Button disabled className="" variant='link'>
+                                    <Link className="font-bold w-full text-blue-500" href={`/page/records-inventory/${form.nap_form_one_header_id}`} >
+                                        <IconEdit />
+                                    </Link>
+                                </Button>
+                                <p>{form.nap_form_one_header_id}</p>
+                            </div>
                     }
                 </>
             )
@@ -60,7 +73,7 @@ export const columns: ColumnDef<Forms>[] = [
             return (
                 <Button
                     variant="ghost"
-                    className="m-0 p-0"
+                    className="m-0 p-0 hover:bg-transparent"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Form Name
@@ -70,12 +83,36 @@ export const columns: ColumnDef<Forms>[] = [
         },
     },
     {
-        accessorKey: "edited",
-        header: "Edited",
-    },
-    {
         accessorKey: "status",
         header: "Status",
+    },
+    {
+        accessorKey: 'assisted_by',
+        header: 'Assistance',
+        id: 'assisted_by',
+        cell: ({ row }) => {
+            const form = row.original;
+            return (
+                <Button className="flex flex-row gap-1 px-2 py-0" variant='outline'>
+                    <IconUser size={15} />
+                    <p className="text-[12px]">Assign</p>
+                </Button>
+            )
+        }
+    },
+    {
+        accessorKey: 'assisted_by',
+        header: 'Approver',
+        id: 'approved_by',
+        cell: ({ row }) => {
+            const form = row.original;
+            return (
+                <Button className="flex flex-row gap-1 px-2 py-0" variant='outline'>
+                    <IconUser size={15} />
+                    <p className="text-[12px]">Assign</p>
+                </Button>
+            )
+        }
     },
     {
         accessorKey: "Action",

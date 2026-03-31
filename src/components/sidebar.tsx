@@ -11,6 +11,7 @@ import { IconFolders } from '@tabler/icons-react';
 import { UserNav } from '@/components/user-nav'
 import { Search } from '@/components/search'
 import ThemeSwitch from '@/components/theme-switch'
+import { signIn, signOut, useSession } from "next-auth/react"
 
 interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   isCollapsed: boolean
@@ -33,21 +34,9 @@ export default function Sidebar({
     }
   }, [navOpened])
 
-  const [modules, setModules] = useState<any>()
-  useEffect(() => {
-    const modulesStr = window.localStorage.getItem('user_modules');
-    console.log("modulesStr################", modulesStr)
-    try {
-      let parsedModules = modulesStr ? JSON.parse(modulesStr) : [];
-      setModules(parsedModules)
-    } catch (err) {
-      console.error('Invalid modules in storage', err);
-      setModules([])
-    }
 
-  }, []);
-
-  console.log('modules', modules)
+  const { data: session, status } = useSession()
+  console.log("sesssionnnnnnnnnnnn", session)
 
   return (
     <aside
@@ -71,7 +60,7 @@ export default function Sidebar({
           <div className={`flex items-center ${!isCollapsed ? 'gap-2' : ''}`}>
             <div className='ml-auto w-fit flex items-center space-x-4'>
               <UserNav />
-              <Search />
+              {/* <Search /> */}
               <ThemeSwitch />
             </div>
 
@@ -90,19 +79,16 @@ export default function Sidebar({
             {navOpened ? <IconX /> : <IconMenu2 />}
           </Button>
         </Layout.Header>
-
-        {/* Navigation links */}
         {
-          modules?.length ? <Nav
+          session?.moduleLinks?.length ? <Nav
             id='sidebar-menu'
             className={`z-40 h-full flex-1 overflow-auto ${navOpened ? 'max-h-screen' : 'max-h-0 py-0 md:max-h-screen md:py-2'}`}
             closeNav={() => setNavOpened(false)}
             isCollapsed={isCollapsed}
-            links={modules}
-          /> : null
+            links={session?.moduleLinks}
+          /> : <div><p>No Side Links Available</p></div>
         }
 
-        {/* Scrollbar width toggle button */}
         <Button
           onClick={() => setIsCollapsed((prev) => !prev)}
           size='icon'

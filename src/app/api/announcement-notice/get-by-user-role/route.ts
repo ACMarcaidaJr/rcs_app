@@ -30,10 +30,9 @@ export async function GET(req: NextRequest) {
             query: `$filter=_crc9f_role_id_value eq ${roleguid} and crc9f_is_active eq ${1} and crc9f_type eq 'inventory'`
 
         })
-        console.log('()()()()())()()() DATA', data)
 
 
-        // USERS SEES WHO'S HAS THE SAME OFFICE,
+        // USERS SEE WHO HAS THE SAME OFFICE,
         // USER CAN SEE THE DOCS, CAN COLLABORATE
         // USER CAN SHARE DOCS TO SAME DOCS
         // THE UI SHOULD HAVE COLLABORATION LOOK

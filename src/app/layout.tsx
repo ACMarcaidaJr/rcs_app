@@ -2,9 +2,8 @@
 import "./globals.css";
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
-
-import { AuthProvider } from "@/context/MsalProvider";
-
+import { SessionProvider } from "next-auth/react"
+import { AuthProvider } from "@/context/AuthProvider";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -17,10 +16,10 @@ export default function RootLayout({
       <body >
         {/* storageKey=vite-ui-theme */}
         <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
-          <AuthProvider >
+          <SessionProvider >
             {children}
             <Toaster />
-          </AuthProvider>
+          </SessionProvider>
         </ThemeProvider>
       </body>
     </html>

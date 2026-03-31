@@ -3,7 +3,7 @@
 // not been using because, this one is already in serverside where uses credintial types: application user/service
 'use client'
 import { useEffect, useState } from "react";
-import { useAuth } from "@/context/MsalProvider";
+import { useAuth } from "@/context/AuthProvider";
 import { msalInstance } from "@/lib/msalInstance";
 import { loginRequest } from "@/lib/authConfig";
 import { InteractionRequiredAuthError } from "@azure/msal-browser";

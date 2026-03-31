@@ -20,7 +20,6 @@ export interface NavLink {
   icon: JSX.Element,
   is_sidelink: number,
 }
-const hi = { title: "Dashboard", label: "", href: "/page/dashboard", icon: "material-symbols:space-dashboard-outline" }
 export interface SideLink extends NavLink {
   sub?: NavLink[]
 }

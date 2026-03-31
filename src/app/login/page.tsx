@@ -1,39 +1,22 @@
-"use client";
-import { useAuth } from "@/context/MsalProvider";
-import { useEffect } from "react";
-import { msalInstance } from "@/lib/msalInstance"; // we'll define this below
-import { useRouter } from "next/navigation";
+"use client"
 
-export default function LoginPage() {
-    const { login } = useAuth();
-    const router = useRouter();
-    useEffect(() => {
-        const handleRedirect = async () => {
-            try {
-                await msalInstance.initialize(); // ✅ must await
+import { signIn, signOut, useSession } from "next-auth/react"
 
-                const response = await msalInstance.handleRedirectPromise();
-                if (response?.account) {
-                    msalInstance.setActiveAccount(response.account);
-                }
-
-                router.push("/dashboard");
-            } catch (error) {
-                console.error("Redirect error", error);
-            }
-        };
-
-        handleRedirect();
-    }, [router]);
+export default function LoginButton() {
+  const { data: session } = useSession()
+  console.log("moduleLinks", session?.moduleLinks)
+  if (session) {
     return (
-        <div className="p-4">
-            <h1 className="text-xl mb-4">Login Page</h1>
-            <button
-                onClick={login}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
-            >
-                Login with Microsoft
-            </button>
-        </div>
-    );
+      <>
+        <p>{session.user?.email}</p>
+        <button onClick={() => signOut()}>Sign out</button>
+      </>
+    )
+  }
+
+  return (
+    <button onClick={() => signIn("azure-ad")}>
+      Sign in with Microsoft
+    </button>
+  )
 }

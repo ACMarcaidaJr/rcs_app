@@ -99,21 +99,21 @@ export default function NapFormOneDocument({ groups, header }: { groups: any, he
                         </View>
                         <View style={{ fontWeight: 'bold', display: 'flex', flexDirection: 'column', width: styles.super_header_width.second, height: styles.super_header.height }}>
                             <View style={{ display: 'flex', padding: 3, height: cellHeight.md * 2, borderWidth: 1 }}>
-                                <Text>1. NAME OF OFFICE: {header[0].name_of_office}</Text>
+                                <Text>1. NAME OF OFFICE: {header?.name_of_office}</Text>
                             </View>
                             <View style={{ display: 'flex', padding: 3, height: cellHeight.md, borderWidth: 1 }}>
-                                <Text>6. ADDRESS: {header[0].address}</Text>
+                                <Text>6. ADDRESS: {header.address}</Text>
                             </View>
                         </View>
                         <View style={{ fontWeight: 'bold', display: 'flex', flexDirection: 'column', flexShrink: 0, width: styles.super_header_width.third, height: styles.super_header.height }}>
-                            <View style={{ borderWidth: 1, padding: 3, height: cellHeight.md }}><Text>2. DEPARTMENT/DIVISION: {header[0].department_or_division} </Text></View>
-                            <View style={{ borderWidth: 1, padding: 3, height: cellHeight.md }}><Text>3. SECTION/UNIT: {header[0].section_or_unit} </Text></View>
-                            <View style={{ borderWidth: 1, padding: 3, height: cellHeight.md }}><Text>7. PERSON-IN-CHARGE OF FILES: {header[0].person_in_charge_of_files}</Text></View>
+                            <View style={{ borderWidth: 1, padding: 3, height: cellHeight.md }}><Text>2. DEPARTMENT/DIVISION: {header.department_or_division} </Text></View>
+                            <View style={{ borderWidth: 1, padding: 3, height: cellHeight.md }}><Text>3. SECTION/UNIT: {header.section_or_unit} </Text></View>
+                            <View style={{ borderWidth: 1, padding: 3, height: cellHeight.md }}><Text>7. PERSON-IN-CHARGE OF FILES: {header.person_in_charge_of_files}</Text></View>
                         </View>
                         <View style={{ fontWeight: 'bold', display: 'flex', flexDirection: 'column', flexShrink: 0, width: styles.super_header_width.fourth, height: styles.super_header.height }}>
-                            <View style={{ borderWidth: 1, padding: 3, height: cellHeight.md }}><Text>4. TELEPHONE NO.: {header[0].telephone_no}</Text></View>
-                            <View style={{ borderWidth: 1, padding: 3, height: cellHeight.md }}><Text>5. EMAIL ADDRESS.: {header[0].email_address}</Text></View>
-                            <View style={{ borderWidth: 1, padding: 3, height: cellHeight.md }}><Text>8. DATE PREPARED: {header[0].date_prepared}</Text></View>
+                            <View style={{ borderWidth: 1, padding: 3, height: cellHeight.md }}><Text>4. TELEPHONE NO.: {header.telephone_no}</Text></View>
+                            <View style={{ borderWidth: 1, padding: 3, height: cellHeight.md }}><Text>5. EMAIL ADDRESS.: {header.email_address}</Text></View>
+                            <View style={{ borderWidth: 1, padding: 3, height: cellHeight.md }}><Text>8. DATE PREPARED: {header.date_prepared}</Text></View>
                         </View>
                     </View>
                     {/* COLUMN NAMES */}
@@ -229,7 +229,7 @@ export default function NapFormOneDocument({ groups, header }: { groups: any, he
                                     <View key={itemIndex} wrap={false} style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', fontSize: 8 }}>
                                         <View style={{ display: 'flex', justifyContent: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.nine, }}>
                                             <Text style={{ paddingLeft: group.items.length > 1 && !item.is_group_value ? 12 : 0 }}>
-                                                {group.items.length > 1 && !item.is_group_value ? '- ' : ''}
+                                                {group.items.length > 1 && !item.is_group_value ? '' : ''}
                                                 {item.records_series_title_and_description}
                                             </Text>
                                         </View>
@@ -288,7 +288,7 @@ export default function NapFormOneDocument({ groups, header }: { groups: any, he
                         </React.Fragment>
                     )}
                 </View>
-                <View  wrap={false} style={{ fontSize: 7, marginTop: 10 }}>
+                <View wrap={false} style={{ fontSize: 7, marginTop: 10 }}>
                     <Text style={{ fontWeight: 'bold' }}>LEGEND:</Text>
                     <View style={{ display: 'flex', gap: 5, marginLeft: 50 }}>
                         <View style={{ display: 'flex', flexDirection: 'row', gap: 20 }}>
@@ -309,21 +309,26 @@ export default function NapFormOneDocument({ groups, header }: { groups: any, he
                 <View wrap={false} style={{ fontSize: 9, marginTop: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                         <Text style={{ fontWeight: 'bold' }}>PREPARED BY:</Text>
-                        <View style={{ borderTop: 1.5, marginTop: 40, width: 150 }}>
-                            <Text style={{ marginHorizontal: 'auto' }}>Name and Position</Text>
+                        <View style={{ marginTop: 30, width: 150 }}>
+                            <Text style={{ fontWeight: 'bold', margin: 'auto' }}>{header?.prepared_by_name}</Text>
+                            <View style={{ borderTop: 1.5, marginTop: 5, width: 150 }}></View>
+                            <Text style={{ marginHorizontal: 'auto', marginTop: 5 }}>{header?.prepared_by_position}</Text>
                         </View>
                     </View>
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                         <Text style={{ fontWeight: 'bold' }}>ASSISTED BY:</Text>
-                        <View style={{ borderTop: 1.5, marginTop: 40, width: 150 }}>
-                            <Text style={{ marginHorizontal: 'auto' }}>NAP Records Management Analyst </Text>
+                        <View style={{ marginTop: 30, width: 150 }}>
+                            <Text style={{ fontWeight: 'bold', margin: 'auto' }}>{header?.assistance_name}</Text>
+                            <View style={{ borderTop: 1.5, marginTop: 5, width: 150 }}></View>
+                            <Text style={{ marginHorizontal: 'auto', marginTop: 5 }}>{header?.assistance_position}</Text>
                         </View>
                     </View>
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                         <Text style={{ fontWeight: 'bold' }}>APPROVED BY:</Text>
-                        <View style={{ borderTop: 1.5, marginTop: 40, width: 150 }}>
-                            <Text style={{ marginHorizontal: 'auto' }}>Chief of the Division/Department
-                            </Text>
+                        <View style={{ marginTop: 30, width: 150 }}>
+                            <Text style={{ fontWeight: 'bold', margin: 'auto' }}>{header?.approver_name}</Text>
+                            <View style={{ borderTop: 1.5, marginTop: 5, width: 150 }}></View>
+                            <Text style={{ marginHorizontal: 'auto', marginTop: 5 }}>{header?.approver_position}</Text>
                         </View>
                     </View>
                 </View>

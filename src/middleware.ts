@@ -1,60 +1,56 @@
-import { NextRequest, NextResponse } from "next/server";
-import { handleApiError } from "./lib/api-error";
+import { getToken } from "next-auth/jwt"
+import { NextRequest, NextResponse } from "next/server"
 
 export async function middleware(req: NextRequest) {
-    const url = req.nextUrl.clone();
-    const path = url.pathname;
-    // Only guard /page/* routes
-    if (path.startsWith("/page/")) {
-        const userModulesCookie = req.cookies.get("user_and_modules")?.value;
-        if (!userModulesCookie) {
-            url.pathname = "/";
-            return NextResponse.redirect(url);
-        }
-        try {
-            const user_and_modules_parsed = JSON.parse(decodeURIComponent(userModulesCookie));
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  })
 
-            const allowedPaths: string[] = user_and_modules_parsed?.modules?.map((mod: any) => mod.href);
+  const { pathname } = req.nextUrl
 
-            const isAllowed = allowedPaths.some((allowedPath) =>
-                path.startsWith(allowedPath)
-            );
-            if (!isAllowed) {
-                url.pathname = allowedPaths[0] || "/";
-                return NextResponse.redirect(url);
-            }
-        } catch (err) {
-            console.error("Invalid user_modules cookie:", err);
-            url.pathname = "/";
-            return NextResponse.redirect(url);
-        }
-    }
-    if (path === "/") {
-        const userModulesCookie = req.cookies.get("user_and_modules")?.value;
-        if (userModulesCookie) {
-            try {
-                const user_and_modules_parsed = JSON.parse(decodeURIComponent(userModulesCookie));
-                const allowedPaths: string[] = user_and_modules_parsed?.modules?.map((mod: any) => mod.href);
-                if (allowedPaths?.length && path === "/") {
-                    url.pathname = allowedPaths[0];
-                    return NextResponse.redirect(url);
-                }
-            } catch (err) {
-                handleApiError(err, req, "No User Role")
-                // console.error("Invalid user_modules cookie:", err);
-                // url.pathname = "/";
-                // return NextResponse.redirect(url);
-            }
+  const isAuth = !!token
+  const isLoginPage = pathname.startsWith("/login")
 
-        }
+  if (!isAuth) {
+    if (isLoginPage) return NextResponse.next()
 
-
+    let from = pathname
+    if (req.nextUrl.search) {
+      from += req.nextUrl.search
     }
 
+    return NextResponse.redirect(
+      new URL(`/login?from=${encodeURIComponent(from)}`, req.url)
+    )
+  }
 
-    return NextResponse.next();
+  const allowedRoutes = token.moduleLinks as {href: string}[] | undefined
+
+  // Logged in but no permissions
+  if (!allowedRoutes || allowedRoutes.length === 0) {
+    return NextResponse.redirect(new URL("/no-role", req.url))
+  }
+
+  // Redirect logged-in user away from login page
+  if (isLoginPage) {
+    return NextResponse.redirect(
+      new URL(allowedRoutes[0]?.href, req.url)
+    )
+  }
+
+  // RBAC route check
+  const isAllowed = allowedRoutes.some(route =>
+    pathname === route.href || pathname.startsWith(route.href + "/")
+  )
+
+  if (!isAllowed) {
+    return NextResponse.redirect(new URL("/unauthorized", req.url))
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {
-    matcher: ["/", "/page/:path*", "/api/:path*"],
-};
+  matcher: ["/pages/:path*", "/login", "/api:path*"],
+}

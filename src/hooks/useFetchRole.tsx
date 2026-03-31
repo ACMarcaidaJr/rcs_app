@@ -1,7 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import Cookies from "js-cookie";
-import { useAuth } from '@/context/MsalProvider';
+import { useAuth } from '@/context/AuthProvider';
 
 interface UserClaims {
   preferred_username?: string;

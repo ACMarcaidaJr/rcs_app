@@ -1,4 +1,4 @@
-import { initialItem, RecordItem } from "@/app/page/records-inventory/[form_id]/components/data/types";
+import { initialItem, RecordItem } from "@/app/pages/records-inventory/[form_id]/components/data/types";
 
 const allowedKeys = Object.keys(initialItem);
 

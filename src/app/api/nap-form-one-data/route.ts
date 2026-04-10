@@ -10,6 +10,7 @@ import { prefixKeysWithCrc9f } from "@/lib/prefixKey";
 export async function POST(req: NextRequest) {
     try {
         const { groups, form_id } = await req.json();
+        console.log("groups", JSON.stringify(groups))
         // =========================
         // STEP 1: FETCH EXISTING GROUPS & ROWS
         // =========================
@@ -22,27 +23,9 @@ export async function POST(req: NextRequest) {
             .map((g: any) => g.crc9f_rcs_nap_form_one_groupid)
             .filter(Boolean);
 
-        let existingRows: any[] = [];
-
-        if (groupGuids.length > 0) {
-            const rowData = await fetchFromDataverse({
-                table: process.env.NAP_FORM_ONE_ROWS_TABLE!,
-                query: `$filter=${groupGuids
-                    .map((id: string) => `crc9f_nap_form_one_group_id/crc9f_rcs_nap_form_one_groupid eq '${id}'`)
-                    .join(" or ")}&$select=crc9f_rcs_nap_form_one_rowid`
-            });
-            existingRows = rowData.value || [];
-        }
-        // if (existingRows.length > 0) {
-        //     await executeBatchSafe(
-        //         existingRows.map(row => ({
-        //             method: "DELETE",
-        //             table: process.env.NAP_FORM_ONE_ROWS_TABLE!,
-        //             id: row.crc9f_rcs_nap_form_one_rowid
-        //         })),
-        //         100
-        //     );
-        // }
+        // =========================
+        // STEP 2: DELETE EXISTING GROUPS (Cascade handles rows)
+        // =========================
         if (groupGuids.length > 0) {
             await executeBatchSafe(
                 groupGuids.map((id: any) => ({
@@ -53,48 +36,29 @@ export async function POST(req: NextRequest) {
                 100
             );
         }
-        // =========================
-        // STEP 2: DELETE EXISTING GROUPS & ROWS
-        // =========================
-        // const deleteOps: BatchOperation[] = [];
-
-        // for (const row of existingRows) {
-        //     deleteOps.push({
-        //         method: "DELETE",
-        //         table: process.env.NAP_FORM_ONE_ROWS_TABLE!,
-        //         id: row.crc9f_rcs_nap_form_one_rowid
-        //     });
-        // }
-
-        // for (const groupId of groupGuids) {
-        //     deleteOps.push({
-        //         method: "DELETE",
-        //         table: process.env.NAP_FORM_ONE_GROUPS_TABLE!,
-        //         id: groupId
-        //     });
-        // }
-
-        // if (deleteOps.length > 0) {
-        //     await executeBatchSafe(deleteOps, 50);
-        // }
 
         // =========================
-        // STEP 3: CREATE GROUPS + ROWS (1 changeset per group)
+        // STEP 3: PREPARE NEW DATA
         // =========================
         const groupedOps: BatchOperation[][] = [];
+        let groupId = 1
         for (const group of groups) {
             const groupOps: BatchOperation[] = [];
 
-            const groupPayload = prefixKeysWithCrc9f({
-                is_editing: group.is_editing ? 1 : 0,
+            // Whitelist Group fields
+            const cleanGroupInput = {
                 group_title: group.group_title || "",
+                is_editing: group.is_editing ? 1 : 0,
                 is_single_unit: group.is_single_unit ? 1 : 0,
-                id: group.id,
-                "nap_form_one_header_id@odata.bind":
-                    `/${process.env.NAP_FORM_ONE_HEADERS_TABLE}(${form_id})`
-            });
+                id: group.id ? String(group.id) : `${groupId}`
+            };
+            groupId++
+            const groupPayload: any = prefixKeysWithCrc9f(cleanGroupInput);
 
-            // ✅ Parent (always Content-ID: 1 inside its changeset)
+            // FIX: Added 'crc9f_' prefix to the lookup key
+            groupPayload["crc9f_nap_form_one_header_id@odata.bind"] =
+                `/${process.env.NAP_FORM_ONE_HEADERS_TABLE}(${form_id})`;
+
             groupOps.push({
                 method: "POST",
                 table: process.env.NAP_FORM_ONE_GROUPS_TABLE!,
@@ -102,32 +66,42 @@ export async function POST(req: NextRequest) {
                 contentId: 1
             });
 
-            const combinedItems = [
-                ...((group.group_values || []).map((item: any) => ({
-                    ...item,
-                    is_group_value: 1
-                }))),
-                ...((group.items || []).map((item: any) => ({
-                    ...item,
-                    is_group_value: 0
-                })))
-            ];
+            for (const row of group.items) {
+                // 1. Double check your incoming property name. 
+                // Is it row.record_series_item_id? Or row.id? Or row.record_id?
+                const itemId = row.record_series_item_id || row.id;
 
-            for (const row of combinedItems) {
-                const {
-                    id,
-                    nap_form_one_group_id,
-                    crc9f_nap_form_one_group_id,
-                    ["nap_form_one_group_id@odata.bind"]: _bind1,
-                    ["crc9f_nap_form_one_group_id@odata.bind"]: _bind2,
-                    ...cleanRow
-                } = row;
+                if (!itemId) {
+                    console.error("Missing ID for row:", row);
+                    continue; // Skip this row or handle the error
+                }
 
-                const rowPayload = prefixKeysWithCrc9f({
-                    ...cleanRow,
-                    // ✅ ALWAYS reference parent via $1
-                    "nap_form_one_group_id@odata.bind": "$1"
-                });
+                const cleanRowInput = {
+                    records_series_title_and_description: row.records_series_title_and_description,
+                    retention_period_active: row.retention_period_active,
+                    retention_period_storage: row.retention_period_storage,
+                    retention_period_total: row.retention_period_total,
+                    disposition_provision: row.disposition_provision,
+                    restrictions: row.restrictions,
+                    years_or_months: row.years_or_months,
+                    date_period_from: row.date_period_from,
+                    date_period_to: row.date_period_to,
+                    records_medium: row.records_medium,
+                    frequency_of_use: row.frequency_of_use,
+                    volume: row.volume,
+                    time_value: row.time_value,
+                    utility_value: row.utility_value,
+                    duplication: row.duplication,
+                    is_full_date: row.is_full_date || 0
+                };
+
+                const rowPayload: any = prefixKeysWithCrc9f(cleanRowInput);
+
+                // 2. Ensure the ID is a valid string/GUID
+                rowPayload["crc9f_record_series_item_id@odata.bind"] =
+                    `/${process.env.RECORD_SERIES_ITEM_TABLE}(${itemId})`;
+
+                rowPayload["crc9f_nap_form_one_group_id@odata.bind"] = "$1";
 
                 groupOps.push({
                     method: "POST",
@@ -135,21 +109,18 @@ export async function POST(req: NextRequest) {
                     body: rowPayload
                 });
             }
-
-            // ✅ Each group becomes its own changeset
             groupedOps.push(groupOps);
         }
 
         // =========================
         // STEP 4: EXECUTE BATCH
         // =========================
-        // Each group's changeset is automatically separated in executeBatchSafe
+        console.log("DEBUG PAYLOAD:", JSON.stringify(groupedOps[0], null, 2));
         await executeBatchMulti(groupedOps);
 
         return NextResponse.json({
             success: true,
-            groupsCreated: groups.length,
-            rowsCreated: groupedOps.length - groups.length
+            groupsCreated: groups.length
         });
 
     } catch (error) {

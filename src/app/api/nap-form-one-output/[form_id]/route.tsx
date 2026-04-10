@@ -26,8 +26,8 @@ interface DataverseGroup {
  */
 const getFormStatus = (header: any) => {
     const submissions = header.nap_form_one_from_submitted_task || [];
-    const rawStatus = !submissions.length 
-        ? 'draft' 
+    const rawStatus = !submissions.length
+        ? 'draft'
         : (submissions[0]?.approver_status ?? submissions[0]?.status ?? 'submitted');
 
     const status = rawStatus.toLowerCase();
@@ -94,7 +94,7 @@ export async function GET(
                 `crc9f_headers_from_napformonegroup(` +
                 `$select=crc9f_nap_form_one_group_id,crc9f_group_title,crc9f_is_single_unit;` +
                 `$expand=crc9f_groups_from_napformonegrow(` +
-                `$select=crc9f_nap_form_one_row_id,crc9f_is_group_value,crc9f_records_series_title_and_description,crc9f_records_medium,crc9f_frequency_of_use,crc9f_period_covered_or_inclusive_dates,crc9f_duplication,crc9f_disposition_provision,crc9f_location_of_records,crc9f_retention_period_active,crc9f_retention_period_total,crc9f_restrictions,crc9f_utility_value,crc9f_time_value,crc9f_volume,crc9f_retention_period_storage` +
+                `$select=crc9f_nap_form_one_row_id,crc9f_is_group_value,crc9f_records_series_title_and_description,crc9f_records_medium,crc9f_frequency_of_use, crc9f_date_period_from,crc9f_date_period_to,crc9f_duplication,crc9f_disposition_provision,crc9f_location_of_records,crc9f_retention_period_active,crc9f_retention_period_total,crc9f_restrictions,crc9f_utility_value,crc9f_time_value,crc9f_volume,crc9f_retention_period_storage` +
                 `))`
         });
 

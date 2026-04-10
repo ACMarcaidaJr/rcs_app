@@ -14,15 +14,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ byro
 
         const custodianRole = token?.roles?.find(role => role.roleName === byrole);
         const userOfficeGuid = token?.userOffice
-        if (!custodianRole?.roleGuid) {
-            return NextResponse.json({
-                success: false,
-                data: [],
-                message_title: 'Unauthorized',
-                message: `User does not have the required role: ${byrole}`,
-            }, { status: 403 });
-        }
-
         const data = await fetchFromDataverse({
             table: process.env.TASK_TABLE!,
             query: `$filter=crc9f_role_id/crc9f_rcs_roleid eq '${custodianRole.roleGuid}' and crc9f_is_active eq 1` +

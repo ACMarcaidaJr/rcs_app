@@ -3,7 +3,7 @@
 import { signIn, signOut, useSession } from "next-auth/react"
 import { Button } from "@/components/custom/button";
 import Image from "next/image";
-import { IconArrowRight, IconBrandAzure } from '@tabler/icons-react';
+import { IconArrowRight, IconBrandAzure, IconFileCheck } from '@tabler/icons-react';
 
 // import { ArrowRightIcon } from "@radix-ui/react-icons";
 export default function LandingPage() {

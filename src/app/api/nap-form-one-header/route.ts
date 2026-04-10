@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
         const data = await fetchFromDataverse({
             table: `${process.env.NAP_FORM_ONE_HEADERS_TABLE}`,
             query: `$filter=crc9f_created_by/crc9f_rcs_userid eq '${userGuid}'` +
-                `&$expand=crc9f_nap_form_one_from_submitted_task($select=crc9f_approver_status, crc9f_status;$orderby=createdon desc)`
+                `&$expand=crc9f_nap_form_one_from_submitted_task($orderby=createdon desc)`
         });
         const response = NextResponse.json({
             success: true,

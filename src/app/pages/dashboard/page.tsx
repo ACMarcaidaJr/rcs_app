@@ -1,199 +1,165 @@
 "use client"
 
-import { useEffect, useState } from 'react'
 import { Layout } from '@/components/custom/layout'
 import { useAuth } from "@/context/AuthProvider"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { 
-  IconLayoutDashboard, 
-  IconFileText, 
-  IconAlertTriangle, 
-  IconCalendarCheck, 
-  IconInfinity,
-  IconSettings,
-  IconUserCheck,
-  IconHistory
+import {
+  IconLayoutDashboard,
+  IconPhone,
+  IconPlayerPlay,
+  IconCode,
+  IconExternalLink,
+  IconBook,
+  IconCircleCheck
 } from '@tabler/icons-react'
-import { Skeleton } from "@/components/ui/skeleton"
-
-interface DashboardStats {
-  total_records: number
-  overdue: number
-  due_this_year: number
-  permanent: number
-}
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 export default function Dashboard() {
   const { account } = useAuth()
-  const [stats, setStats] = useState<DashboardStats | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  // Derived role for easy logic
-  const role = account?.name || 'user';
- 
-  useEffect(() => {
-    const getStats = async () => {
-      try {
-        // You can eventually pass the role to the API if needed: `/api/sample?role=${role}`
-        const res = await fetch('/api/sample') 
-        const result = await res.json()
-        if (result.success) setStats(result.data)
-      } catch (err) {
-        console.error('Error fetching dashboard stats:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-    getStats()
-  }, [role])
+  const role = account?.name || 'user'
 
   return (
     <Layout>
       <Layout.Header sticky className="bg-background/95 backdrop-blur border-b">
         <div className="flex flex-row gap-3 items-center">
-          <div className="flex items-center justify-center p-2.5 bg-secondary rounded-lg shadow-sm">
-            <IconLayoutDashboard size={20} className="text-secondary-foreground" />
+          <div className="flex items-center justify-center p-2.5 bg-primary/10 rounded-lg shadow-sm">
+            <IconLayoutDashboard size={20} className="text-primary" />
           </div>
           <div className="flex flex-col">
-            <h1 className="text-xl font-bold leading-none">Dashboard</h1>
-            <p className="text-xs text-muted-foreground mt-1 capitalize font-medium">
-              {role === 'admin' ? 'System Administration' : 'Overview of Your Recent Activities'}
+            <h1 className="text-xl font-bold leading-none">Information Hub</h1>
+            <p className="text-xs text-muted-foreground mt-1 font-medium">
+              Announcements, Tutorials, and System Updates
             </p>
           </div>
         </div>
       </Layout.Header>
 
-      <Layout.Body className="space-y-6">
-        {/* Dynamic Welcome Section */}
-        <div className="flex flex-col gap-1">
-          <h2 className="text-2xl font-bold italic">Welcome back, {account?.name || 'User'}</h2>
-          <p className="text-muted-foreground">
-            {role === 'custodian' && "Monitor your office's record retention and lifecycle status."}
-            {role === 'approver' && "Review pending disposal requests and office compliance."}
-            {role === 'admin' && "Manage system users, logs, and global configurations."}
-            {!['custodian', 'approver', 'admin'].includes(role) && "Access your personal workspace and recent tasks."}
-          </p>
-        </div>
+      <Layout.Body className="space-y-8 max-w-7xl mx-auto">
 
-        {/* Dynamic Stats Grid - These could be swapped entirely based on role */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <StatCard
-            title={role === 'admin' ? "Total Users" : "Total Records"}
-            value={stats?.total_records}
-            loading={loading}
-            icon={<IconFileText className="h-4 w-4 text-muted-foreground" />}
-            description={role === 'admin' ? "Active system accounts" : "All official record series"}
-          />
-          <StatCard
-            title={role === 'approver' ? "Pending Review" : "Overdue"}
-            value={stats?.overdue}
-            loading={loading}
-            icon={<IconAlertTriangle className="h-4 w-4 text-destructive" />}
-            description="Requires immediate attention"
-            trend={stats?.overdue && stats.overdue > 0 ? "text-destructive" : ""}
-          />
-          <StatCard
-            title="Scheduled"
-            value={stats?.due_this_year}
-            loading={loading}
-            icon={<IconCalendarCheck className="h-4 w-4 text-blue-500" />}
-            description="Upcoming tasks this year"
-          />
-          <StatCard
-            title="Archives"
-            value={stats?.permanent}
-            loading={loading}
-            icon={<IconInfinity className="h-4 w-4 text-emerald-500" />}
-            description="Permanent data storage"
-          />
-        </div>
+        {/* 1. ANNOUNCEMENTS SECTION (Hero Style) */}
+        <section className="space-y-4">
+          <div className="flex items-center gap-2">
+            <IconPhone className="text-orange-500" size={20} />
+            <h2 className="text-lg font-bold tracking-tight uppercase text-slate-600 dark:text-slate-400">Latest Announcements</h2>
+          </div>
+          <Card className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white border-none shadow-lg">
+            <CardContent className="p-8">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div className="space-y-2">
+                  <Badge className="bg-white/20 hover:bg-white/30 border-none text-white font-bold">NEW UPDATE</Badge>
+                  <h3 className="text-3xl font-black">2026 Records Inventory Now Open</h3>
+                  <p className="text-blue-100 max-w-2xl leading-relaxed">
+                    All departments are advised to update their NAP Form No. 1 records by the end of the second quarter.
+                    Please ensure all inclusive dates are verified against official issuances.
+                  </p>
+                </div>
+                <Button variant="secondary" className="font-bold shadow-xl">
+                  View Full Memo
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
 
-        <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="overview">Snapshot</TabsTrigger>
-            {role === 'admin' && <TabsTrigger value="system">System Logs</TabsTrigger>}
-            <TabsTrigger value="reports">Recent Activity</TabsTrigger>
-          </TabsList>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-          <TabsContent value="overview" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle>Performance Overview</CardTitle>
-                  <CardDescription>
-                    Summary of operations for the current fiscal period.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="h-[240px] flex items-center justify-center bg-muted/20 border-2 border-dashed rounded-md m-6 mt-0">
-                  <span className="text-sm text-muted-foreground italic">Visualization Module</span>
-                </CardContent>
-              </Card>
-
-              {/* Dynamic Quick Actions */}
-              <Card className="col-span-3">
-                <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
-                  <CardDescription>Frequent tasks for your role</CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-2">
-                  {role === 'custodian' && (
-                    <>
-                      <ActionButton label="Request Disposal" />
-                      <ActionButton label="Update Inventory" />
-                    </>
-                  )}
-                  {role === 'approver' && (
-                    <>
-                      <ActionButton label="Review Requests" icon={<IconUserCheck size={16}/>} />
-                      <ActionButton label="Generate Compliance Report" />
-                    </>
-                  )}
-                  {role === 'admin' && (
-                    <>
-                      <ActionButton label="User Management" icon={<IconSettings size={16}/>} />
-                      <ActionButton label="System Audit" icon={<IconHistory size={16}/>} />
-                    </>
-                  )}
-                  <ActionButton label="Export Data" />
-                </CardContent>
-              </Card>
+          {/* 2. TUTORIALS SECTION (Left/Center) */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center gap-2">
+              <IconBook className="text-blue-500" size={20} />
+              <h2 className="text-lg font-bold tracking-tight uppercase text-slate-600 dark:text-slate-400">System Tutorials</h2>
             </div>
-          </TabsContent>
-        </Tabs>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <TutorialCard
+                title="Adding New Records"
+                description="Learn how to properly fill out the NAP Form No. 1 title and description fields."
+                duration="3 mins"
+              />
+              <TutorialCard
+                title="Date Mode Management"
+                description="Switching between Year Only and Full Date modes for inclusive dates."
+                duration="2 mins"
+              />
+              <TutorialCard
+                title="Exporting for Submission"
+                description="How to generate the final document for National Archives submission."
+                duration="5 mins"
+              />
+              <TutorialCard
+                title="Retention Logic"
+                description="Understanding Active vs. Storage retention periods in the system."
+                duration="4 mins"
+              />
+            </div>
+          </div>
+
+          {/* 3. ABOUT THE DEVELOPER (Right Side) */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <IconCode className="text-emerald-500" size={20} />
+              <h2 className="text-lg font-bold tracking-tight uppercase text-slate-600 dark:text-slate-400">Developer Info</h2>
+            </div>
+            <Card className="border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+              <CardHeader className="bg-slate-50 dark:bg-slate-900/50 pb-4">
+                <CardTitle className="text-md font-bold">RCS-Tools</CardTitle>
+                <CardDescription>Version 1.0 Build 2026</CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6 space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 font-black">
+                    ACM
+                  </div>
+                  <div>
+                    <p className="font-bold text-sm text-slate-900 dark:text-white">Adam C. Marcaida Jr.</p>
+                    <p className="text-xs text-muted-foreground font-medium">Software Developer</p>
+                  </div>
+                </div>
+
+                <p className="text-xs leading-relaxed text-muted-foreground">
+                  Specializing in administrative and records management software designed for government compliance and archival efficiency.
+                </p>
+
+                <div className="pt-4 border-t space-y-2">
+                  <DevContactItem icon={<IconCircleCheck size={14} />} text="React & Tailwind Focused" />
+                  <DevContactItem icon={<IconCircleCheck size={14} />} text="RA 9470 Compliance Specialist" />
+                  <DevContactItem icon={<IconExternalLink size={14} />} text="Contact Support" isLink />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
       </Layout.Body>
     </Layout>
   )
 }
 
-// Sub-component for buttons to keep code clean
-function ActionButton({ label, icon }: { label: string, icon?: React.ReactNode }) {
+function TutorialCard({ title, description, duration }: { title: string, description: string, duration: string }) {
   return (
-    <button className="group w-full flex items-center justify-between p-3 text-sm font-medium border rounded-md hover:bg-accent hover:text-accent-foreground transition-all">
-      <div className="flex items-center gap-2">
-        {icon}
-        {label}
-      </div>
-      <span className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-    </button>
+    <Card className="group cursor-pointer hover:border-blue-400 transition-all border-slate-200 dark:border-slate-800">
+      <CardContent className="p-0">
+        <div className="aspect-video bg-slate-100 dark:bg-slate-900 flex items-center justify-center group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 transition-colors">
+          <IconPlayerPlay size={32} className="text-slate-300 group-hover:text-blue-500 transition-colors" />
+        </div>
+        <div className="p-4 space-y-2">
+          <div className="flex justify-between items-center">
+            <h4 className="font-bold text-sm">{title}</h4>
+            <span className="text-[10px] font-bold text-muted-foreground bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">{duration}</span>
+          </div>
+          <p className="text-xs text-muted-foreground line-clamp-2">{description}</p>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
-function StatCard({ title, value, icon, description, loading, trend = "" }: any) {
+function DevContactItem({ icon, text, isLink = false }: { icon: React.ReactNode, text: string, isLink?: boolean }) {
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{title}</CardTitle>
-        {icon}
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <Skeleton className="h-8 w-20" />
-        ) : (
-          <div className={`text-2xl font-bold tracking-tight ${trend}`}>{value ?? 0}</div>
-        )}
-        <p className="text-[11px] text-muted-foreground mt-1 font-medium">{description}</p>
-      </CardContent>
-    </Card>
+    <div className={`flex items-center gap-2 text-xs font-medium ${isLink ? 'text-blue-600 cursor-pointer hover:underline' : 'text-slate-500'}`}>
+      {icon}
+      <span>{text}</span>
+    </div>
   )
 }

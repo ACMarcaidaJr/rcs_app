@@ -1,15 +1,4 @@
 'use client'
-import {
-  IconChecklist,
-  IconLayoutDashboard,
-  IconColumns,
-  IconCheckupList,
-  IconTools,
-  IconRubberStamp,
-  IconSearch,
-  IconClipboardPlus
-} from '@tabler/icons-react'
-import { Icon } from "@iconify/react";
 
 import { JSX } from 'react'
 

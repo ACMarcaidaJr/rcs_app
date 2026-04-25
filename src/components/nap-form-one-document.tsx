@@ -178,48 +178,48 @@ export default function NapFormOneDocument({ groups, header }: { groups: any, he
                             {
                                 group.items.length > 1 && (
                                     <View wrap={false} style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', fontSize: 8, borderWidth: 1 }}>
-                                        <View style={{ display: 'flex', justifyContent: 'center', padding: '3pt', width: styles.col_width.nine, }}>
+                                        <View style={{ display: 'flex', padding: '3pt', width: styles.col_width.nine, }}>
                                             <Text >
                                                 {group.group_title}
                                             </Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.ten, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '3pt', width: styles.col_width.ten, }}>
 
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.eleven, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '3pt', width: styles.col_width.eleven, }}>
 
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.twelve, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '3pt', width: styles.col_width.twelve, }}>
 
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.thirten, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '3pt', width: styles.col_width.thirten, }}>
 
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.fourten, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '3pt', width: styles.col_width.fourten, }}>
 
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.fifteen, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '3pt', width: styles.col_width.fifteen, }}>
 
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.sixten, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '3pt', width: styles.col_width.sixten, }}>
 
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.seventen, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '3pt', width: styles.col_width.seventen, }}>
 
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.eighten, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '3pt', width: styles.col_width.eighten, }}>
 
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.nineten / 3 }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '3pt', width: styles.col_width.nineten / 3 }}>
 
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.nineten / 3 }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '3pt', width: styles.col_width.nineten / 3 }}>
 
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.nineten / 3 }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '3pt', width: styles.col_width.nineten / 3 }}>
 
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.twenty, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '3pt', width: styles.col_width.twenty, }}>
 
                                         </View>
                                     </View>
@@ -228,59 +228,59 @@ export default function NapFormOneDocument({ groups, header }: { groups: any, he
                             {
                                 group.items?.map((item: any, itemIndex: number) => (
                                     <View key={itemIndex} wrap={false} style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', fontSize: 8 }}>
-                                        <View style={{ display: 'flex', justifyContent: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.nine, }}>
+                                        <View style={{ display: 'flex', borderWidth: 1, padding: '3pt', width: styles.col_width.nine, }}>
                                             <Text style={{ paddingLeft: group.items.length > 1 && !item.is_group_value ? 12 : 0 }}>
-                                                {group.items.length > 1 && !item.is_group_value ? '' : ''}
+                                                {/* {group.items.length > 1 && !item.is_group_value ? '' : ''} */}
                                                 {item.records_series_title_and_description}
                                             </Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.ten, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.ten, }}>
                                             <Text>
-                                                {formatDate(item?.date_period_from)} {item?.date_period_to && item?.date_period_from ? "-" : ""} {formatDate(item?.date_period_to)}
+                                                {item?.date_period_from} {item?.date_period_to && item?.date_period_from ? "-" : ""} {item?.date_period_to}
                                             </Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.eleven, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.eleven, }}>
                                             <Text>
                                                 {item.volume}
                                             </Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.twelve, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.twelve, }}>
                                             <Text>
                                                 {item.records_medium}
                                             </Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.thirten, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.thirten, }}>
                                             <Text>
                                                 {item.restrictions}
                                             </Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.fourten, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.fourten, }}>
                                             <Text>
                                                 {item.location_of_records}
                                             </Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.fifteen, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.fifteen, }}>
                                             <Text>  {item.frequency_of_use}</Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.sixten, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.sixten, }}>
                                             <Text>  {item.duplication}</Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.seventen, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.seventen, }}>
                                             <Text>  {item.time_value}</Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.eighten, }}>
-                                            <Text>  {item.utility_value}</Text>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.eighten, }}>
+                                            <Text>  {JSON.parse(item.utility_value).map((item: any, idx: any) => `${idx ? ',' : ''}${item}`)}</Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', fontSize: 6, alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.nineten / 3, borderWidth: 1 }}>
-                                            <Text>  {item.retention_period_active}</Text>
+                                        <View style={{ display: 'flex', flexDirection: 'row', fontSize: 6, alignItems: 'center', padding: '3pt', width: styles.col_width.nineten / 3, borderWidth: 1 }}>
+                                            <Text>  {item.time_value === 'P' ? 'Permanent' : item.retention_period_active} {item.years_or_months}</Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', fontSize: 6, alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.nineten / 3, borderWidth: 1 }}>
-                                            <Text>  {item.retention_period_storage}</Text>
+                                        <View style={{ display: 'flex', flexDirection: 'row', fontSize: 6, alignItems: 'center', padding: '3pt', width: styles.col_width.nineten / 3, borderWidth: 1 }}>
+                                            <Text>  {item.time_value === 'P' ? 'Permanent' : item.retention_period_storage} {item.years_or_months}</Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', fontSize: 6, alignItems: 'center', justifyContent: 'center', padding: '3pt', width: styles.col_width.nineten / 3, borderWidth: 1 }}>
-                                            <Text>  {item.retention_period_total}</Text>
+                                        <View style={{ display: 'flex', flexDirection: 'row', fontSize: 6, alignItems: 'center', padding: '3pt', width: styles.col_width.nineten / 3, borderWidth: 1 }}>
+                                            <Text>  {item.time_value === 'P' ? 'Permanent' : item.retention_period_total} {item.years_or_months}</Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.twenty, }}>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderWidth: 1, padding: '3pt', width: styles.col_width.twenty, }}>
                                             <Text>  {item.disposition_provision}</Text>
                                         </View>
                                     </View>

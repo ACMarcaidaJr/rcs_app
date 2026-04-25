@@ -17,7 +17,7 @@ export async function fetchFromDataverse({
     body,
     query,
     responseType = "json",
-    maxsize = 10,
+    maxsize = 5000,
 }: FetchFromDataverseParams) {
     const token = await getDataverseAccessToken();
 

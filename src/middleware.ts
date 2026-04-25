@@ -12,6 +12,21 @@ export async function middleware(req: NextRequest) {
   const isAuth = !!token
   const isLoginPage = pathname.startsWith("/login")
 
+  // ✅ PUBLIC ROUTES (VERY IMPORTANT)
+  const isPublic =
+    pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/_next") ||
+    pathname === "/no-role" ||
+    pathname === "/unauthorized"
+
+  if (isPublic) return NextResponse.next()
+
+  // ❌ DO NOT PROTECT API ROUTES
+  if (pathname.startsWith("/api")) {
+    return NextResponse.next()
+  }
+
+  // 🔐 NOT AUTHENTICATED
   if (!isAuth) {
     if (isLoginPage) return NextResponse.next()
 
@@ -25,24 +40,32 @@ export async function middleware(req: NextRequest) {
     )
   }
 
-  const allowedRoutes = token.moduleLinks as {href: string}[] | undefined
+  const allowedRoutes = token.flattedLinks as { href: string }[] | undefined
 
-  // Logged in but no permissions
+  // ❌ LOGGED IN BUT NO ROLES
   if (!allowedRoutes || allowedRoutes.length === 0) {
     return NextResponse.redirect(new URL("/no-role", req.url))
   }
 
-  // Redirect logged-in user away from login page
+  // 🔁 REDIRECT AWAY FROM LOGIN
   if (isLoginPage) {
     return NextResponse.redirect(
-      new URL(allowedRoutes[0]?.href, req.url)
+      new URL(allowedRoutes[0]?.href || "/", req.url)
     )
   }
 
-  // RBAC route check
-  const isAllowed = allowedRoutes.some(route =>
-    pathname === route.href || pathname.startsWith(route.href + "/")
-  )
+  // ✅ NORMALIZE PATH (remove trailing slash)
+  const cleanPath = pathname.replace(/\/$/, "")
+
+  // 🔐 RBAC CHECK (IMPROVED)
+  const isAllowed = allowedRoutes.some(route => {
+    const base = route.href.replace(/\/$/, "")
+
+    return (
+      cleanPath === base ||
+      cleanPath.startsWith(base + "/")
+    )
+  })
 
   if (!isAllowed) {
     return NextResponse.redirect(new URL("/unauthorized", req.url))
@@ -52,5 +75,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/pages/:path*", "/login", "/api:path*"],
+  matcher: ["/pages/:path*", "/login"], // ✅ REMOVED /api
 }

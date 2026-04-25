@@ -126,13 +126,14 @@ interface SingleComboboxProps {
     value: string | number
     onChange: (value: string | number) => void
     placeholder?: string
+    className?: string
 }
-
 export function SingleCombobox({
     options,
     value,
     onChange,
     placeholder = "Select an option...",
+    className,
 }: SingleComboboxProps) {
     const [open, setOpen] = React.useState(false)
 
@@ -149,7 +150,7 @@ export function SingleCombobox({
                 <div
                     role="combobox"
                     aria-expanded={open}
-                    className={cn(
+                    className={cn(className,
                         "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm cursor-pointer hover:bg-accent/50 transition-colors focus-within:ring-2 focus-within:ring-ring",
                         "w-full"
                     )}

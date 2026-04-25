@@ -78,9 +78,9 @@ export async function POST(req: NextRequest) {
 
                 const cleanRowInput = {
                     records_series_title_and_description: row.records_series_title_and_description,
-                    retention_period_active: row.retention_period_active,
-                    retention_period_storage: row.retention_period_storage,
-                    retention_period_total: row.retention_period_total,
+                    retention_period_active: row.retention_period_active.toString(),
+                    retention_period_storage: row.retention_period_storage.toString(),
+                    retention_period_total: row.retention_period_total.toString(),
                     disposition_provision: row.disposition_provision,
                     restrictions: row.restrictions,
                     years_or_months: row.years_or_months,

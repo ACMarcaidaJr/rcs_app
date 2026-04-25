@@ -1,5 +1,5 @@
 
-import { initialItem, RecordItem } from "@/app/pages/nap-form-one/[form_id]/components/data/types";
+import { initialItem, RecordItem } from "@/app/pages/nap-submission/[form_id]/components/data/types";
 const allowedKeys = Object.keys(initialItem);
 
 export const pickOnlyRecordItemFields = (row: any): RecordItem => ({
@@ -15,9 +15,9 @@ export const pickOnlyRecordItemFields = (row: any): RecordItem => ({
     duplication: row.duplication || '',
     time_value: row.time_value || '',
     utility_value: row.utility_value || '',
-    retention_period_active: row.retention_period_active || '',
-    retention_period_storage: row.retention_period_storage || '',
-    retention_period_total: row.retention_period_total || '',
+    retention_period_active: row.retention_period_active || 0,
+    retention_period_storage: row.retention_period_storage || 0,
+    retention_period_total: row.retention_period_total || 0,
     disposition_provision: row.disposition_provision || '',
     is_full_date: row.is_full_date ?? 0,
 });

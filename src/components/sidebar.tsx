@@ -1,17 +1,13 @@
 'use client'
 
-import { use, useEffect, useState } from 'react'
-import { IconChevronsLeft, IconMenu2, IconX } from '@tabler/icons-react'
+import { useEffect, useState } from 'react'
+import { IconChevronsLeft, IconMenu2, IconX, IconAffiliateFilled } from '@tabler/icons-react'
 import { Layout } from './custom/layout'
 import { Button } from './custom/button'
 import Nav from './nav'
 import { cn } from '@/lib/utils'
-import { IconFolders } from '@tabler/icons-react';
-
-import { UserNav } from '@/components/user-nav'
-import { Search } from '@/components/search'
 import ThemeSwitch from '@/components/theme-switch'
-import { signIn, signOut, useSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 
 interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   isCollapsed: boolean
@@ -24,8 +20,9 @@ export default function Sidebar({
   setIsCollapsed,
 }: SidebarProps) {
   const [navOpened, setNavOpened] = useState(false)
+  const { data: session } = useSession()
 
-  /* Make body not scrollable when navBar is opened */
+  /* Prevent scrolling when mobile nav is open */
   useEffect(() => {
     if (navOpened) {
       document.body.classList.add('overflow-hidden')
@@ -34,70 +31,96 @@ export default function Sidebar({
     }
   }, [navOpened])
 
-
-  const { data: session, status } = useSession()
-  console.log("sesssionnnnnnnnnnnn", session)
-
   return (
     <aside
       className={cn(
-        `fixed left-0 right-0 top-0 z-50 w-full border-r-2 border-r-muted transition-[width] md:bottom-0 md:right-auto md:h-svh ${isCollapsed ? 'md:w-14' : 'md:w-64'}`,
+        `fixed left-0 right-0 top-0 z-50 w-full border-r-2 border-r-muted transition-[width] bg-background md:bottom-0 md:right-auto md:h-svh ${isCollapsed ? 'md:w-20' : 'md:w-64'
+        }`,
         className
       )}
     >
-      {/* Overlay in mobile */}
+      {/* Mobile Overlay */}
       <div
         onClick={() => setNavOpened(false)}
-        className={`absolute inset-0 transition-[opacity] delay-100 duration-700 ${navOpened ? 'h-svh opacity-50' : 'h-0 opacity-0'} w-full bg-black md:hidden`}
+        className={cn(
+          'absolute inset-0 transition-opacity duration-500 bg-black md:hidden',
+          navOpened ? 'h-svh opacity-50' : 'h-0 opacity-0 pointer-events-none'
+        )}
       />
 
       <Layout fixed className={navOpened ? 'h-svh' : ''}>
-        {/* Header */}
+        {/* Brand Header */}
         <Layout.Header
           sticky
-          className='z-50 flex justify-between px-4 py-3 shadow-sm md:px-4'
+          className={cn(
+            'z-50 flex items-center py-3 shadow-sm transition-all',
+            isCollapsed ? 'justify-center md:px-0' : 'justify-between px-4'
+          )}
         >
-          <div className={`flex items-center ${!isCollapsed ? 'gap-2' : ''}`}>
-            <div className='ml-auto w-fit flex items-center space-x-4'>
-              <UserNav />
-              {/* <Search /> */}
-              <ThemeSwitch />
+          <div className={cn(
+            'flex items-center overflow-hidden',
+            isCollapsed ? 'justify-center w-full' : 'gap-2'
+          )}>
+            {/* Logo Icon - Always Visible */}
+            <div className='flex items-center justify-center size-8 p-1.5 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-lg shrink-0'>
+              <IconAffiliateFilled className="size-full" />
             </div>
 
+            {/* Text - Hidden when collapsed */}
+            {!isCollapsed && (
+              <div className='flex items-baseline animate-in fade-in slide-in-from-left-2 duration-300'>
+                <p className='text-base font-bold tracking-tight text-foreground'>Records</p>
+                <p className='text-base font-black tracking-tight text-blue-600 dark:text-blue-400'>Hub</p>
+              </div>
+            )}
           </div>
 
-          {/* Toggle Button in mobile */}
-          <Button
-            variant='ghost'
-            size='icon'
-            className='md:hidden'
-            aria-label='Toggle Navigation'
-            aria-controls='sidebar-menu'
-            aria-expanded={navOpened}
-            onClick={() => setNavOpened((prev) => !prev)}
-          >
-            {navOpened ? <IconX /> : <IconMenu2 />}
-          </Button>
+          {/* Actions - Completely hidden when collapsed */}
+          {!isCollapsed && (
+            <div className='flex items-center gap-2 animate-in fade-in duration-300'>
+              <ThemeSwitch />
+              <Button
+                variant='ghost'
+                size='icon'
+                className='md:hidden'
+                onClick={() => setNavOpened((prev) => !prev)}
+              >
+                {navOpened ? <IconX /> : <IconMenu2 />}
+              </Button>
+            </div>
+          )}
         </Layout.Header>
-        {
-          session?.moduleLinks?.length ? <Nav
-            id='sidebar-menu'
-            className={`z-40 h-full flex-1 overflow-auto ${navOpened ? 'max-h-screen' : 'max-h-0 py-0 md:max-h-screen md:py-2'}`}
-            closeNav={() => setNavOpened(false)}
-            isCollapsed={isCollapsed}
-            links={session?.moduleLinks}
-          /> : <div><p>No Side Links Available</p></div>
-        }
+        {/* Navigation Area */}
+        <Layout.Body className={cn('flex flex-col p-0 m-0 overflow-hidden ', isCollapsed && 'md:px-0')}>
+          {session?.moduleLinks?.length ? (
+            <Nav
+              navOpened={navOpened}
+              id='sidebar-menu'
+              className={cn(
+                'z-40 h-full transition-all duration-300',
+                navOpened ? 'max-h-screen opacity-100' : 'max-h-0 md:py-3 md:max-h-none md:opacity-100'
+              )}
+              closeNav={() => setNavOpened(false)}
+              isCollapsed={isCollapsed}
+              links={session?.moduleLinks}
+            />
+          ) : (
+            <div className='flex h-full w-full items-center justify-center p-4 text-xs text-muted-foreground text-center'>
+              No Side Links Available
+            </div>
+          )}
+        </Layout.Body>
 
+        {/* Desktop Collapse Toggle */}
         <Button
           onClick={() => setIsCollapsed((prev) => !prev)}
           size='icon'
           variant='outline'
-          className='absolute -right-5 top-1/2 z-50 hidden rounded-full md:inline-flex'
+          className='absolute -right-5 top-1/2 z-50 hidden rounded-full bg-background md:inline-flex'
         >
           <IconChevronsLeft
             stroke={1.5}
-            className={`h-5 w-5 ${isCollapsed ? 'rotate-180' : ''}`}
+            className={cn('h-5 w-5 transition-transform', isCollapsed && 'rotate-180')}
           />
         </Button>
       </Layout>

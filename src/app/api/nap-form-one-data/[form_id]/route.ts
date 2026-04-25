@@ -8,7 +8,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ form
         const { form_id } = await params;
         const data = await fetchFromDataverse({
             table: `${process.env.NAP_FORM_ONE_GROUPS_TABLE}`,
-            // We select rcs_group_id_value to know which Group this came from in the inventory
             query: `$filter=crc9f_nap_form_one_header_id/crc9f_rcs_nap_form_one_headerid eq '${form_id}'` +
                 `&$expand=crc9f_groups_from_napformonegrow($select=` +
                 `crc9f_records_series_title_and_description,crc9f_is_group_value,` +
@@ -17,21 +16,20 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ form
                 `crc9f_location_of_records,crc9f_retention_period_active,` +
                 `crc9f_retention_period_total,crc9f_restrictions,crc9f_nap_form_one_row_id,` +
                 `crc9f_utility_value,crc9f_time_value,crc9f_volume,crc9f_retention_period_storage,crc9f_is_full_date,` +
-                `_crc9f_record_series_item_id_value)` // Added lookup for the original Item ID
+                `_crc9f_record_series_item_id_value)` 
         });
         console.log("data", JSON.stringify(data.value))
         const groupitems = stripPrefixFromKeys(data).value.map((group: any) => {
             const allRows = group.groups_from_napformonegrow;
             return {
                 nap_form_one_group_id: group.nap_form_one_group_id,
-                rcs_group_id: group.rcs_group_id_value, // Map the Series Title ID
+                rcs_group_id: group.rcs_group_id_value, 
                 id: Number(group.id),
                 group_title: group.group_title || '',
                 is_editing: !!group.is_editing,
                 is_single_unit: !!group.is_single_unit,
                 items: allRows.map((row: any) => ({
                     ...stripPrefixFromKeys(row),
-                    // CRITICAL: Ensure the key matches what the Dialog logic looks for
                     record_series_item_id: row.record_series_item_id_value || row._crc9f_record_series_item_id_value
                 }))
             }

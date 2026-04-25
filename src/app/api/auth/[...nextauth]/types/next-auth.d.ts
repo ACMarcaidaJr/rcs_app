@@ -10,6 +10,8 @@ declare module "next-auth" {
     userGuid: string;
     userOffice: string;
     roles: any[];
+    flattedLinks?: any[]
+
   }
 }
 
@@ -17,9 +19,10 @@ declare module "next-auth/jwt" {
   interface JWT extends DefaultJWT {
     accessToken?: string
     moduleLinks?: any[]
+    flattedLinks?: any[]
     oid: string;
     userGuid: string;
     userOffice: string;
-        roles: any[];
+    roles: any[];
   }
 }

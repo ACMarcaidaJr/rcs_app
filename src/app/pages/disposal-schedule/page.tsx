@@ -61,7 +61,7 @@ export default function Page() {
     const fetchCountRecords = async () => {
         try {
             setLoadingRecordsCount(true)
-            const res = await fetch('/api/nap-form-one-row/count')
+            const res = await fetch('/api/records-series-item/disposal-schedule/count')
             const data = await res.json()
             setRecordsCountData(data?.data)
         } catch (error) {
